@@ -1,6 +1,7 @@
 import csv
 import os
 import sys
+import random
 
 users=[['kosong' for i in range(3)]for j in range(103)]
 with open('user.csv') as csv_file:
@@ -18,11 +19,23 @@ with open('candi.csv') as csv_file:
             
             candi[i]=row
             i+=1
-# print(users)
-# print(candi)
-# def check():
-# Bondo = False
-# Roro = True
+for i in range(1,101):
+    for j in range(2,5):
+        candi[i][j]=random.randint(1,5)
+bahan_bangunan =[['kosong' for i in range(3)]for j in range(4)]
+with open('bahan_bangunan.csv') as csv_file:
+    reader = csv.reader(csv_file,delimiter=';')
+    i = 0
+    for row in reader :
+            
+            bahan_bangunan[i]=row
+            i+=1
+bahan_bangunan[1][0]='batu'
+bahan_bangunan[2][0]='pasir'
+bahan_bangunan[3][0]='air'
+for i in range(1,4):
+    bahan_bangunan[i][2]=0
+
 
 def login(users):
       loginstatus = False
@@ -182,3 +195,27 @@ def ubahjin(users):
                     break
     else :
         print('Tidak ada jin dengan username tersebut.')
+
+
+def kumpul(users,bahan_bangunan):
+    for i in range(3,103):
+        if users[i][2]=='jin_pengumpul':
+            pasir = random.randint(0,5)
+            batu = random.randint(0,5)
+            air = random.randint(0,5)
+            bahan_bangunan[1][2]+=batu
+            bahan_bangunan[2][2] += pasir
+            bahan_bangunan[3][2]+= air
+            print(f'Jin menemukan {pasir} pasir, {batu} batu, dan {air} air.')
+            break
+    else :
+        print("Tidak ada Jin Pengumpul yang sudah login.")
+
+
+def bangun(users,candi,bahan_bangunan):
+
+
+
+
+
+
