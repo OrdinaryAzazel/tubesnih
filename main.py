@@ -160,11 +160,11 @@ def hapusjin(users,candi):
             if True:#jika belum save
                 for i in range(101):
                     if candi[i][0]==username_jin:
-                        candi[i][0]='kosong1' #candi dihapus
-                        candi[i][1]='kosong1'
-                        candi[i][2]='kosong1'
-                        candi[i][3]='kosong1'
-                        candi[i][4]='kosong1'
+                        candi[i][0]='0' #candi dihapus
+                        candi[i][1]='kosong'
+                        candi[i][2]=0
+                        candi[i][3]=0
+                        candi[i][4]=0
                         break
     else :
         print('Tidak ada jin dengan username tersebut.')
@@ -172,10 +172,7 @@ def hapusjin(users,candi):
 
 
 
-# def search(users,indexdicari,stringdicari):
-#     found = False
-#     for i in range(103):
-#         if users[indexdicari][]
+
 
 def ubahjin(users):
     username_jin = input('Masukkan username jin : ')
@@ -245,6 +242,7 @@ def batchkumpul(users,bahan_bangunan):
         print('Kumpul gagal. Anda tidak punya jin pengumpul. Silahkan summon terlebih dahulu.')
 
 #def batchbangun(users,candi,bahan_bangunan):
+
 def laporanjin(users,candi,bahan_bangunan):
     if users[1][0] !='login':
         print('Laporan jin hanya dapat diakses oleh akun Bandung Bondowoso.')
@@ -374,4 +372,57 @@ def help(users):
     print('=========== HELP ===========')
     if users[1][0]=='login':
         print('1. logout')
-        print
+        print('Deskripsi')
+        print('2. summonjin')
+        print('Deskripsi')
+        print('3. hapusjin')
+        print('Deskripsi')
+        print('4. ubahjin')
+        print('Deskripsi')
+        print('5. batchkumpul')
+        print('Deskripsi')
+        print('6. batchbangun')
+        print('Deskripsi')
+        print('7. laporanjin')
+        print('Deskripsi')
+        print('8. laporancandi')
+        print('Deskripsi')
+        print('9. save')
+        print('deskripsi')
+    elif users[2][0]=='login':
+        print('1. logout')
+        print('Deskripsi')
+        print('2. hancurkancandi')
+        print('Deskripsi')
+        print('3. ayamberkokok')
+        print('Deskripsi')
+        print('4. save')
+        print('Deskripsi')
+    else:
+        for i in range(3,103):
+            if users[i][2]=='jin_pembangun':
+                print('Role Jin Pembangun')
+                print('1. ')
+                #belum selesaii
+        else : #belum login
+            print('1. login')
+            print('Deskripsi')
+            print('2. exit')
+            print('Deskripsi')
+
+
+def save(users,candi,bahan_bangunan):
+    folder = input('Masukkan nama folder: ')
+    print('')
+    print('')
+    print('Saving...')
+    print('')
+    isExist = os.path.exists(save/folder)
+    
+    if not isExist:
+        os.makedirs(save/folder)
+        #save new csv file
+    elif isExist :
+        print(f'Berhasil menyimpan data di folder ')
+        #save csv file
+    print(f'Berhasil menyimpan data di folder save/{folder} ! ')
