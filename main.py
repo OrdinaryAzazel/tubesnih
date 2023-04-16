@@ -2,7 +2,7 @@ import csv
 import os
 import sys
 
-users=[['kosong' for i in range(3)]for i in range(103)]
+users=[['kosong' for i in range(3)]for j in range(103)]
 with open('user.csv') as csv_file:
     reader = csv.reader(csv_file,delimiter=';')
     i = 0
@@ -10,8 +10,16 @@ with open('user.csv') as csv_file:
             
             users[i]=row
             i+=1
-
-print(users)
+candi =[['kosong' for i in range(5)]for j in range(101)]
+with open('candi.csv') as csv_file:
+    reader = csv.reader(csv_file,delimiter=';')
+    i = 0
+    for row in reader :
+            
+            candi[i]=row
+            i+=1
+# print(users)
+# print(candi)
 # def check():
 # Bondo = False
 # Roro = True
@@ -121,8 +129,24 @@ def summonjin(users):
         print('Membacakan mantra...')
         print("")
         print(f"Jin {username_jin} berhasil dipanggil!")
-        print(users)
-
+def hapusjin(users,candi):
+    username_jin = input('Masukkan username jin : ')
+    for i in range(1,102):
+        if users[i][0] == username_jin:
+            users[i][0] = 'kosong'
+            users[i][1] = 'kosong'
+            users[i][2] = 'kosong'
+            if True:#jika belum save
+                for i in range(101):
+                    if candi[i][0]==username_jin:
+                        candi[i][0]='kosong1' #candi dihapus
+                        candi[i][1]='kosong1'
+                        candi[i][2]='kosong1'
+                        candi[i][3]='kosong1'
+                        candi[i][4]='kosong1'
+                        break
+    else :
+        print('Tidak ada jin dengan username tersebut.')
 
 
 
@@ -131,4 +155,30 @@ def summonjin(users):
 #     found = False
 #     for i in range(103):
 #         if users[indexdicari][]
-    
+
+def ubahjin(users):
+    username_jin = input('Masukkan username jin : ')
+    for i in range(103):
+        if users[i][0]== username_jin:
+            if users[i][2]=='jin_pengumpul':
+                ubah = input('Jin ini bertipe “Pengumpul”. Yakin ingin mengubah ke tipe “Pembangun” (Y/N)?')
+                while ubah != 'n' and ubah !='N' and ubah != 'y' and ubah !='Y' :
+                    ubah = input('Jin ini bertipe “Pengumpul”. Yakin ingin mengubah ke tipe “Pembangun” (Y/N)?')
+                
+                if ubah == 'y' or ubah =='Y' :
+                    users[i][2]='jin_pembangun'
+                    break
+                else :
+                    break
+            elif users[i][2]=='jin_pembangun':
+                ubah = input('Jin ini bertipe “Pembangun”. Yakin ingin mengubah ke tipe “Pengumpul” (Y/N)?')
+                while ubah != 'n' and ubah !='N' and ubah != 'y' and ubah !='Y' :
+                    ubah = input('Jin ini bertipe “Pembangun”. Yakin ingin mengubah ke tipe “Pengumpul” (Y/N)?')
+                
+                if ubah == 'y' or ubah =='Y' :
+                    users[i][2]='jin_pengumpul'
+                    break
+                else :
+                    break
+    else :
+        print('Tidak ada jin dengan username tersebut.')
