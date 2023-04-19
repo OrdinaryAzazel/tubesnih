@@ -1,39 +1,116 @@
-import csv
+
 import os
 import sys
 import random
 
-users=[['kosong' for i in range(3)]for j in range(103)]
-with open('user.csv') as csv_file:
-    reader = csv.reader(csv_file,delimiter=';')
-    i = 0
-    for row in reader :
-            
-            users[i]=row
-            i+=1
-candi =[['kosong' for i in range(5)]for j in range(101)]
-with open('candi.csv') as csv_file:
-    reader = csv.reader(csv_file,delimiter=';')
-    i = 0
-    for row in reader :
-            
-            candi[i]=row
-            i+=1
-for i in range(101):
-    candi[i][0]=0
-bahan_bangunan =[['kosong' for i in range(3)]for j in range(4)]
-with open('bahan_bangunan.csv') as csv_file:
-    reader = csv.reader(csv_file,delimiter=';')
-    i = 0
-    for row in reader :
-            
-            bahan_bangunan[i]=row
-            i+=1
+
+def read_user(file_csv):
+    with open(file_csv) as csv:
+        data = csv.readlines()
+        listdata=[['kosong' for i in range(3)]for j in range(103)]
+        i = 0
+        for baris in data:
+            j = 0
+            ruang = [0 for i in range (3)]
+            temp = ''
+            for huruf in baris:
+                if huruf == ';' or huruf == '\n':
+                    ruang[j] = temp
+                    j += 1
+                    temp = ''
+                elif huruf!='kosong':
+                    temp += huruf
+            listdata[i]=ruang
+            i += 1
+        
+        return listdata
+users=read_user('user.csv')
+def read_bahan(file_csv):
+    with open(file_csv) as csv:
+        data = csv.readlines()
+        listdata = [['kosong' for i in range(3)] for i in range (4)]
+        i = 0
+        for baris in data:
+            j = 0
+            ruang = [0 for i in range (3)]
+            temp = ''
+            for huruf in baris:
+                if huruf == ';' or huruf == '\n':
+                    ruang[j] = temp
+                    j += 1
+                    temp = ''
+                else:
+                    temp += huruf
+            listdata[i] = ruang
+            i += 1
+        return listdata
+bahan_bangunan=read_bahan('bahan_bangunan.csv')
 bahan_bangunan[1][0]='batu'
+bahan_bangunan[1][1]='bahan keras nih kayanya'
 bahan_bangunan[2][0]='pasir'
+bahan_bangunan[2][1]='bahan lembut inimah'
 bahan_bangunan[3][0]='air'
+bahan_bangunan[3][1]='bahan cairr banget'
 for i in range(1,4):
     bahan_bangunan[i][2]=0
+
+
+
+def read_candi(file_csv):
+    with open(file_csv) as csv: 
+        data = csv.readlines()
+        listdata = [[0 for i in range(5)] for j in range (101)]
+        for i in range(1,101):
+            for j in range(2,5):
+                listdata[i][j] = 0
+        i = 0
+        for baris in data :
+            j = 0
+            part = [0 for i in range(5)]
+            temp = ""
+            for huruf in baris:
+                if huruf == ";" or huruf == "\n":
+                    part[j] = temp
+                    j += 1
+                    temp = ""
+                elif huruf!='kosong':
+                    temp += huruf
+                elif huruf != 0:
+                    temp += huruf
+
+                
+            if temp != "":
+                part[j] = temp
+            listdata[i] = part
+            i += 1
+        
+        return (listdata)
+
+candi = read_candi('candi.csv')
+# print(bacacandi)
+# candi =[['kosong' for i in range(5)]for j in range(101)]
+for i in range(1,101):
+    for j in range(5):
+        if candi[i][0] !=0:
+            if j != 1:
+                candi[i][j]=int(candi[i][j])
+            else :
+                candi[i][j]=candi[i][j]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 username_login=''
 
@@ -123,6 +200,7 @@ def exit():
         quit()
 
     else :
+        save()
         quit()
         #fungsi f04 and exit
 #belumberes
@@ -422,8 +500,24 @@ def batchbangun():
                             #     print('Sisa candi yang perlu dibangun: 0.')
                             #     break
         else :
-            print(f'Bangun gagal {total_pasir - bahan_bangunan[2][2]} pasir, {total_batu - bahan_bangunan[1][2]} batu, dan {total_air - bahan_bangunan[3][2]} air. ')
-                     
+            kurang_pasir=total_pasir - bahan_bangunan[2][2]
+            kurang_batu = total_batu - bahan_bangunan[1][2]
+            kurang_air= total_air - bahan_bangunan[3][2]
+            if kurang_air>0 and kurang_pasir>0 and kurang_batu>0 :
+                print(f'Bangun gagal kurang {(total_pasir - bahan_bangunan[2][2])} pasir, {total_batu - bahan_bangunan[1][2]} batu, dan {total_air - bahan_bangunan[3][2]} air. ')
+            elif kurang_air>0 and kurang_batu>0 :
+                print(f'Bangun gagal kurang {total_batu - bahan_bangunan[1][2]} batu dan {total_air - bahan_bangunan[3][2]} air. ')
+            elif kurang_air > 0 and kurang_pasir>0:
+                print(f'Bangun gagal kurang {total_batu - bahan_bangunan[2][2]} pasir dan {total_air - bahan_bangunan[3][2]} air. ')
+            elif kurang_batu and kurang_pasir>0:
+                print(f'Bangun gagal kurang {total_batu - bahan_bangunan[2][2]} pasir dan {total_air - bahan_bangunan[1][2]} batu. ')
+            elif kurang_pasir>0:
+                print(f'Bangun gagal kurang {total_batu - bahan_bangunan[2][2]} pasir.')
+            elif kurang_batu>0:
+                print(f'Bangun gagal kurang {total_batu - bahan_bangunan[1][2]} batu.')
+            elif kurang_air>0:
+                print(f'Bangun gagal kurang {total_batu - bahan_bangunan[3][2]} air.')
+
 
         
         
@@ -447,6 +541,22 @@ def laporanjin():
         pasir = bahan_bangunan[2][2]
         batu = bahan_bangunan[1][2]
         air = bahan_bangunan[3][2]
+        
+        total_candi = 0
+        for i in range(1,102):
+            if candi[i][0] != 0:
+                total_candi+=1
+        if total_candi==0:
+            jin_terajin='-'
+            jin_termalas= '-'
+        else :
+            jin= terajin()
+            jin_terajin=jin[0]
+            jin_termalas=jin[1]
+        
+
+        
+        
         #cari jin terajin termalas
         # output
         print(f'Total Jin: {total_jin}')
@@ -468,6 +578,8 @@ def laporancandi():
     termurah = 0
     idtermurah=0
     idtermahal=0
+    rajinbangun = 0
+    malesbangun =0
     if users[1][0] =='login': 
         for i in range(1,101):
             if candi[i][0] != 0: #asumsi candi yang belum terbangun bernilai 0
@@ -500,6 +612,82 @@ def laporancandi():
             print(f'ID Candi Termurah: -')
     else :
         print('Laporan candi hanya dapat diakses oleh akun Bandung Bondowoso.')
+
+def terajin():
+    totalcandi=0
+    for i in range(101):
+        if candi[i][0] != 0:
+            totalcandi +=1
+    jin_dan_totalcandi=[['kosong' for i in range(2)]for j in range(totalcandi)]
+    for i in range(totalcandi):
+        jin_dan_totalcandi[i][1]=0
+    for i in range(1,101):
+        if candi[i][0] != 0:
+            j=0
+            while True:
+                
+                if jin_dan_totalcandi[j][0]=='kosong':
+                    jin_dan_totalcandi[j][0]=candi[i][1]
+                    jin_dan_totalcandi[j][1]+=1
+                    
+                    break
+                elif jin_dan_totalcandi[j][0]==candi[i][1]: 
+                    jin_dan_totalcandi[j][1]+=1
+                    
+                    break
+                else :
+                    j+=1
+    print(jin_dan_totalcandi)
+    terbanyak=0
+    
+    iddicarimax=0
+    for i in range(totalcandi):
+        if jin_dan_totalcandi[i][0] != 'kosong':
+            
+            if jin_dan_totalcandi[i][1]>terbanyak:
+                iddicarimax=i
+                terbanyak = jin_dan_totalcandi[i][1]
+            elif jin_dan_totalcandi[i][1]==terbanyak:
+                if jin_dan_totalcandi[i][1]==jin_dan_totalcandi[iddicarimax][1]:
+                    jin1=jin_dan_totalcandi[i][0]
+                    jin2=jin_dan_totalcandi[iddicarimax][0]
+                    if jin1<jin2:
+                        iddicarimax=i
+                        terbanyak = jin_dan_totalcandi[i][1]
+                    else :
+                        terbanyak = jin_dan_totalcandi[iddicarimax][1]
+    tersedikit=terbanyak
+    iddicarimin=0
+    for i in range(totalcandi):
+        if jin_dan_totalcandi[i][0] != 'kosong':
+            if jin_dan_totalcandi[i][1]<tersedikit:
+                iddicarimin=i
+                tersedikit = jin_dan_totalcandi[i][1]
+            elif jin_dan_totalcandi[i][1]==tersedikit:
+                if jin_dan_totalcandi[i][1]==jin_dan_totalcandi[iddicarimin][1]:
+                    jin1=jin_dan_totalcandi[i][0]
+                    jin2=jin_dan_totalcandi[iddicarimin][0]
+                    if jin1>jin2:
+                        iddicarimin=i
+                        tersedikit = jin_dan_totalcandi[i][1]
+                    else :
+                        tersedikit = jin_dan_totalcandi[iddicarimin][1]
+    jin=['kosong' for i in range(2)]
+    jin[0]=jin_dan_totalcandi[iddicarimax][0]
+    jin[1]=jin_dan_totalcandi[iddicarimin][0]
+    # print(jin)
+    return(jin)
+
+
+                
+                    
+
+                # iddicari = i
+
+
+
+
+
 
 # users[2][0]='login'
 
@@ -605,20 +793,71 @@ def help():
                     break
 
 
+
+
+
+import argparse
+import os
+import sys
+def load():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('path', type = str, nargs="?", const="")
+    args = parser.parse_args()
+    folder = input("Masukkan nama folder penyimpanan: ")
+    parents_path = 'save' + '\\' + folder
+    print(args.path)
+    if folder =='':
+        print('Tidak ada nama folder yang diberikan!')
+    elif args.path:
+        print("Masukkan forder yang ingin dibuka!")
+    elif os.path.exists(f"{parents_path}{args.path}"):
+        print('Loading...')
+        path_data_user = f"{parents_path}{args.path}\\user.csv"
+        path_data_candi = f"{parents_path}{args.path}\\candi.csv"
+        path_data_bahan_bangunan = f"{parents_path}{args.path}\\bahan_bangunan.csv"
+        print('Selamat datang di program “Manajerial Candi”')
+    else:
+        print(f"Folder ,\"{args.path}\" tidak ditemukan.")
+
+
+
+
+
+
+def tocsv(file,data,n1,n2):
+    string=''
+    f = open(file, 'w+')
+    for i in range(n1):
+        for j in range(n2):
+            if j != (n2-1):
+                string = string + str(data[i][j]) + ';'
+            else :
+                string = string + str(data[i][j])
+        string = string + "\n"
+        f.write(string)
+        string=''
+    f.close()
+
 def save():
     folder = input('Masukkan nama folder: ')
     print('')
     print('')
     print('Saving...')
     print('')
-    isExist = os.path.exists(save/folder)
+    isExist = os.path.exists('save')
     
-    if not isExist:
-        os.makedirs(save/folder)
-        #save new csv file
-    elif isExist :
-        print(f'Berhasil menyimpan data di folder ')
-        #save csv file
+    if isExist:
+        if os.path.exists(f'save\\{folder}'):
+            tocsv(f'save\\{folder}\\user.csv',users,103,3)
+            tocsv(f'save\\{folder}\\candi.csv',candi,101,5)
+            tocsv(f'save\\{folder}\\bahan_bangunan.csv',bahan_bangunan,1,3)
+        else :
+
+            os.makedirs(f'save\\{folder}')
+            print(f'Membuat folder save/{folder}!')
+            tocsv(f'save\\{folder}\\user.csv',users,103,0)
+            tocsv(f'save\\{folder}\\candi.csv',candi,101,0)
+            tocsv(f'save\\{folder}\\bahan_bangunan.csv',bahan_bangunan,4,0)
     print(f'Berhasil menyimpan data di folder save/{folder} ! ')
 
 

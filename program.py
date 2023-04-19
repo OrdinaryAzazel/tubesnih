@@ -1,14 +1,12 @@
-import csv
+
 import command
 from command import candi
 from command import users
 from command import bahan_bangunan
 import random
+# command.load()
 username_login=''
 
-
-# for j in range(1,4):
-#     bahan_bangunan[j][2]=random.randint(50,100)
 while True:
     masukan = input('>>> ')
     if masukan =='login':
