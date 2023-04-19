@@ -36,6 +36,31 @@ for i in range(1,4):
     bahan_bangunan[i][2]=0
 
 username_login=''
+
+def searchusers(idicari,username):
+    found = True
+    i=3
+    while found:
+        if users[i][idicari]== username:
+            return True
+        else :
+            i+=1
+        if i > 102:
+            return False
+def searchcandi(idicari,username):
+    found = True
+    i=1
+    while found:
+        if users[i][idicari]== username:
+            found = False
+            return True
+        else :
+            i+=1
+        if i > 101:
+            found = False
+            return False
+        
+
 def login():
     global username_login
     
@@ -55,8 +80,7 @@ def login():
                 print("Masukkan command “help” untuk daftar command yang dapat kamu panggil.")
                 username_login = username
                 users[i][0]= 'login'
-                print(username_login)
-                print(users[i][0])
+                
                 break    
         elif i == 102 :
             print('Username tidak terdaftar!')
@@ -68,10 +92,11 @@ def login():
                  
 #login nya harus diubah
 def logout():
+    global username_login
     for i in range(1,103):
         if users[i][0]=='login':
             users[i][0]=username_login
-            print(f'udah logout {username_login}')
+            username_login=''
             break
         elif i == 102 :
             print("Logout gagal!")
@@ -80,7 +105,10 @@ def logout():
 
 
 
-
+# sisa = 100
+# for i in range(1,101):
+#     if candi[i][0]!=0:
+#         sisa -= 1
 
 
 def exit():
@@ -96,72 +124,72 @@ def exit():
         #fungsi f04 and exit
 #belumberes
 
+
 def summonjin():
-    print('Jenis jin yang dapat dipanggil:')
-    print(" (1) Pengumpul - Bertugas mengumpulkan bahan bangunan")
-    print(" (2) Pembangun - Bertugas membangun candi")
-    
-    jenis_jin=''
-    jumlah_jin=0
-    for i in range(3,103):
-        if users[i][0]=='kosong':
-            jumlah_jin+=1
-    if jumlah_jin==0 :
-        print('Jumlah Jin telah maksimal! (100 jin). Bandung tidak dapat men-summon lebih dari itu')
-    else:
-        nomorjin= int(input('Masukkan nomor jenis jin yang ingin dipanggil: '))
-        while (nomorjin != 1) and (nomorjin != 2):
-            print(f'Tidak ada jenis jin bernomor "{nomorjin}"!')
+    if users[1][0]=='login':
+        print('Jenis jin yang dapat dipanggil:')
+        print(" (1) Pengumpul - Bertugas mengumpulkan bahan bangunan")
+        print(" (2) Pembangun - Bertugas membangun candi")
+        
+        jenis_jin=''
+        jumlah_jin=0
+        for i in range(3,103):
+            if users[i][0]=='kosong':
+                jumlah_jin+=1
+        if jumlah_jin==0 :
+            print('Jumlah Jin telah maksimal! (100 jin). Bandung tidak dapat men-summon lebih dari itu')
+        else:
             nomorjin= int(input('Masukkan nomor jenis jin yang ingin dipanggil: '))
-        if nomorjin == 1 :
-            print("Memilih jin 'Pengumpul'.")
-            jenis_jin = 'jin_pengumpul'
+            while (nomorjin != 1) and (nomorjin != 2):
+                print(f'Tidak ada jenis jin bernomor "{nomorjin}"!')
+                nomorjin= int(input('Masukkan nomor jenis jin yang ingin dipanggil: '))
+            if nomorjin == 1 :
+                print("Memilih jin 'Pengumpul'.")
+                jenis_jin = 'jin_pengumpul'
 
-        else :
-            print("Memilih jin 'Pembangun'.")
-            jenis_jin = 'jin_pembangun'
-
-        username_jin = input('Masukkan username jin: ')
-        username_check= True
-        i = 3
-        while username_check:
-            if users[i][0] != username_jin and users[i][0]=='kosong':
-                username_check = False
-                
-            elif users[i][0]==username_jin:
-                print(f'Username “{username_jin}” sudah diambil!')
-                username_jin = input('Masukkan username jin: ')
-                i=3
             else :
-                i+=1
-            
-                
-        password_jin = input('Masukkan password jin: ')
-    
-        while (len(password_jin) < 5 or len(password_jin) >25) :
-            print('Password panjangnya harus 5-25 karakter!')
+                print("Memilih jin 'Pembangun'.")
+                jenis_jin = 'jin_pembangun'
+
+            username_jin = input('Masukkan username jin: ')
+            while searchusers(0,username_jin):
+                print(f'Username “{username_jin}” sudah diambil!')
+                username_jin = input('Masukkan username jin: ')    
             password_jin = input('Masukkan password jin: ')
-        for j in range(3,103):
-            if users[j][0] == 'kosong':
-                users[j][0] = username_jin
-                users[j][1] = password_jin
-                users[j][2] = jenis_jin
-                break
-        print('Mengumpulkan sesajen...')
-        print('Menyerahkan sesajen...')
-        print('Membacakan mantra...')
-        print("")
-        print(f"Jin {username_jin} berhasil dipanggil!")
+        
+            while (len(password_jin) < 5 or len(password_jin) >25) :
+                print('Password panjangnya harus 5-25 karakter!')
+                password_jin = input('Masukkan password jin: ')
+            for j in range(3,103):
+                if users[j][0] == 'kosong':
+                    users[j][0] = username_jin
+                    users[j][1] = password_jin
+                    users[j][2] = jenis_jin
+                    break
+            print('Mengumpulkan sesajen...')
+            print('Menyerahkan sesajen...')
+            print('Membacakan mantra...')
+            print("")
+            print(f"Jin {username_jin} berhasil dipanggil!")
+    else:
+        print("Summon jin hanya dapat diakses bandung bondowoso")
+
+
 
 def hapusjin():#belum selesai ada fungsi save
-    username_jin = input('Masukkan username jin : ')
-    for i in range(3,102):
-        if users[i][0] == username_jin:
-            users[i][0] = 'kosong'
-            users[i][1] = 'kosong'
-            users[i][2] = 'kosong'
-            if True:#jika belum save
-                for i in range(101):
+    if users[1][0]=='login':
+        username_jin = input('Masukkan username jin : ')
+        if searchusers(0,username_jin):
+            konfirmasi = input('Apakah anda yakin ingin menghapus jin dengan username Jin1 (Y/N)? ')
+            while konfirmasi != 'n' and konfirmasi !='N' and konfirmasi != 'y' and konfirmasi !='Y' :
+                konfirmasi = input('Apakah anda yakin ingin menghapus jin dengan username Jin1 (Y/N)? ')
+            if konfirmasi == 'y' or konfirmasi == 'Y':
+                for i in range(3,102):
+                    if users[i][0] == username_jin:
+                        users[i][0] = 'kosong'
+                        users[i][1] = 'kosong'
+                        users[i][2] = 'kosong'
+                for i in range(1,101): #bila jin sudah membangun candi
                     if candi[i][0]==username_jin:
                         candi[i][0]='0' #candi dihapus
                         candi[i][1]='kosong'
@@ -169,58 +197,122 @@ def hapusjin():#belum selesai ada fungsi save
                         candi[i][3]=0
                         candi[i][4]=0
                         break
+        else :
+            print('Tidak ada jin dengan username tersebut.')
     else :
-        print('Tidak ada jin dengan username tersebut.')
+        print('Hapus jin hanya dapat diakses Bandung Bondowoso.')
 
 
 
 
 
 
-def ubahjin(users):
-    username_jin = input('Masukkan username jin : ')
-    for i in range(103):
-        if users[i][0]== username_jin:
-            if users[i][2]=='jin_pengumpul':
-                ubah = input('Jin ini bertipe “Pengumpul”. Yakin ingin mengubah ke tipe “Pembangun” (Y/N)?')
-                while ubah != 'n' and ubah !='N' and ubah != 'y' and ubah !='Y' :
-                    ubah = input('Jin ini bertipe “Pengumpul”. Yakin ingin mengubah ke tipe “Pembangun” (Y/N)?')
-                
-                if ubah == 'y' or ubah =='Y' :
-                    users[i][2]='jin_pembangun'
-                    break
-                else :
-                    break
-            elif users[i][2]=='jin_pembangun':
-                ubah = input('Jin ini bertipe “Pembangun”. Yakin ingin mengubah ke tipe “Pengumpul” (Y/N)?')
-                while ubah != 'n' and ubah !='N' and ubah != 'y' and ubah !='Y' :
-                    ubah = input('Jin ini bertipe “Pembangun”. Yakin ingin mengubah ke tipe “Pengumpul” (Y/N)?')
-                
-                if ubah == 'y' or ubah =='Y' :
-                    users[i][2]='jin_pengumpul'
-                    break
-                else :
-                    break
+def ubahjin():
+    if users[1][0]=='login':
+        username_jin = input('Masukkan username jin : ')
+        if searchusers(0,username_jin):
+            for i in range(3,103):
+                if users[i][0]== username_jin:
+                    if users[i][2]=='jin_pengumpul':
+                        ubah = input('Jin ini bertipe “Pengumpul”. Yakin ingin mengubah ke tipe “Pembangun” (Y/N)?')
+                        while ubah != 'n' and ubah !='N' and ubah != 'y' and ubah !='Y' :
+                            ubah = input('Jin ini bertipe “Pengumpul”. Yakin ingin mengubah ke tipe “Pembangun” (Y/N)?')
+                        
+                        if ubah == 'y' or ubah =='Y' :
+                            users[i][2]='jin_pembangun'
+                            print("Jin telah berhasil diubah.")
+                            break
+                        else :
+                            print("Jin tidak diubah.")
+                            break
+                    elif users[i][2]=='jin_pembangun':
+                        ubah = input('Jin ini bertipe “Pembangun”. Yakin ingin mengubah ke tipe “Pengumpul” (Y/N)?')
+                        while ubah != 'n' and ubah !='N' and ubah != 'y' and ubah !='Y' :
+                            ubah = input('Jin ini bertipe “Pembangun”. Yakin ingin mengubah ke tipe “Pengumpul” (Y/N)?')
+                        
+                        if ubah == 'y' or ubah =='Y' :
+                            users[i][2]='jin_pengumpul'
+                            print("Jin telah berhasil diubah.")
+                            break
+                        else :
+                            print("Jin tidak diubah.")
+                            break
+        else :
+            print('Tidak ada jin dengan username tersebut.')
     else :
-        print('Tidak ada jin dengan username tersebut.')
+        print('ubahjin hanya dapat diakses Bandung Bondowoso')
 
-
-def kumpul(users,bahan_bangunan):
+def kumpul():
     for i in range(3,103):
-        if users[i][2]=='jin_pengumpul':
-            pasir = random.randint(0,5)
-            batu = random.randint(0,5)
-            air = random.randint(0,5)
-            bahan_bangunan[1][2]+=batu
-            bahan_bangunan[2][2] += pasir
-            bahan_bangunan[3][2]+= air
-            print(f'Jin menemukan {pasir} pasir, {batu} batu, dan {air} air.')
-            break
-    else :
-        print("Tidak ada Jin Pengumpul yang sudah login.")
+        if users[i][0]=='login':
+            if users[i][2] == 'jin_pengumpul':
+                pasir = random.randint(0,5)
+                batu = random.randint(0,5)
+                air = random.randint(0,5)
+                bahan_bangunan[1][2]+=batu
+                bahan_bangunan[2][2] += pasir
+                bahan_bangunan[3][2]+= air
+                print(f'Jin menemukan {pasir} pasir, {batu} batu, dan {air} air.')
+                break
+            else :
+                print('kumpul hanya dapat diakses jin pengumpul')
 
 
-# def bangun(users,candi,bahan_bangunan):
+def bangun():
+    global username_login
+    if searchusers(0,username_login):
+        for i in range(3,103):
+            if username_login == users[i][0]:
+                if users[i][2]=='jin_pembangun':   
+                    for j in range(1,101):
+                        idcandi=1 
+                        if candi[j][0] == 0:
+                            butuh_pasir = random.randint(1,5)
+                            butuh_air = random.randint(1,5)
+                            butuh_batu = random.randint(1,5)
+                            if bahan_bangunan[1][2] > butuh_batu and bahan_bangunan[2][2]>butuh_pasir and bahan_bangunan[3][2]>butuh_air:
+                                candi[j][0]=idcandi
+                                candi[j][2]=butuh_pasir
+                                candi[j][3]=butuh_batu
+                                candi[j][4]=butuh_air
+                                candi[j][1]=username_login
+                                bahan_bangunan[1][2] -=butuh_batu
+                                bahan_bangunan[2][2]-=butuh_pasir
+                                bahan_bangunan[3][2]-=butuh_air
+                                print('Candi berhasil dibangun')
+                                totalcandi=100
+                                for g in range(1,101):
+                                    if candi[g][0] != 0:
+                                        totalcandi-=1
+                                if totalcandi >= 0:
+                                    print(f'Sisa candi yang perlu dibangun: {totalcandi}.')
+                                    break
+                                else:
+                                    totalcandi=0
+                                    bahan_bangunan[1][2] -=butuh_batu
+                                    bahan_bangunan[2][2]-=butuh_pasir
+                                    bahan_bangunan[3][2]-=butuh_air
+                                    print('Candi berhasil dibangun.')
+                                    print('Sisa candi yang perlu dibangun: 0.')
+
+
+                            
+                            else :
+                                print('Bahan bangunan tidak mencukupi.')
+                                print('Candi tidak bisa dibangun!')
+                                break
+
+
+                        else :
+                            idcandi+=1
+                else:
+                    print('Hanya dapat diakses Jin Pembangun')
+    else:
+        print("Hanya dapat diakses Jin Pembangun")
+# username_login="sobri"
+# users[5][0]=username_login
+# users[5][2]='jin_pembangun'
+# bangun()
 
 
 def batchkumpul(users,bahan_bangunan):
