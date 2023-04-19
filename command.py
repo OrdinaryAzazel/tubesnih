@@ -1,8 +1,26 @@
 
-import os
-import sys
-import random
+import os,random,argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('path', type = str, nargs="?", const="")
+args = parser.parse_args()
+parents_path = os.getcwd()+ '\\' + 'save'
 
+if not args.path:
+    print("Tidak ada nama folder yang diberikan!")
+    path_data_user = f"{parents_path}\\user.csv"
+    path_data_candi = f"{parents_path}\\candi.csv"
+    path_data_bahan_bangunan = f"{parents_path}\\bahan_bangunan.csv"
+elif os.path.exists(f"{parents_path}\\{args.path}"):
+    print('Loading...')
+    path_data_user = f"{parents_path}\\{args.path}\\user.csv"
+    path_data_candi = f"{parents_path}\\{args.path}\\candi.csv"
+    path_data_bahan_bangunan = f"{parents_path}\\{args.path}\\bahan_bangunan.csv"
+    print('Selamat datang di program “Manajerial Candi”')
+else:
+    path_data_user = f"{parents_path}\\user.csv"
+    path_data_candi = f"{parents_path}\\candi.csv"
+    path_data_bahan_bangunan = f"{parents_path}\\bahan_bangunan.csv"
+    print(f"Folder ,\"{args.path}\" tidak ditemukan.")
 
 def read_user(file_csv):
     with open(file_csv) as csv:
@@ -24,7 +42,7 @@ def read_user(file_csv):
             i += 1
         
         return listdata
-users=read_user('user.csv')
+users=read_user(path_data_user)
 def read_bahan(file_csv):
     with open(file_csv) as csv:
         data = csv.readlines()
@@ -44,18 +62,17 @@ def read_bahan(file_csv):
             listdata[i] = ruang
             i += 1
         return listdata
-bahan_bangunan=read_bahan('bahan_bangunan.csv')
-bahan_bangunan[1][0]='batu'
-bahan_bangunan[1][1]='bahan keras nih kayanya'
-bahan_bangunan[2][0]='pasir'
-bahan_bangunan[2][1]='bahan lembut inimah'
-bahan_bangunan[3][0]='air'
-bahan_bangunan[3][1]='bahan cairr banget'
-for i in range(1,4):
-    bahan_bangunan[i][2]=0
-
-
-
+bahan_bangunan=read_bahan(path_data_bahan_bangunan)
+def procedure_bahan():
+    bahan_bangunan[1][0]='batu'
+    bahan_bangunan[1][1]='bahan keras nih kayanya'
+    bahan_bangunan[2][0]='pasir'
+    bahan_bangunan[2][1]='bahan lembut inimah'
+    bahan_bangunan[3][0]='air'
+    bahan_bangunan[3][1]='bahan cairr banget'
+    for i in range(1,4):
+        bahan_bangunan[i][2]=0
+procedure_bahan()
 def read_candi(file_csv):
     with open(file_csv) as csv: 
         data = csv.readlines()
@@ -85,10 +102,7 @@ def read_candi(file_csv):
             i += 1
         
         return (listdata)
-
-candi = read_candi('candi.csv')
-# print(bacacandi)
-# candi =[['kosong' for i in range(5)]for j in range(101)]
+candi = read_candi(path_data_candi)
 for i in range(1,101):
     for j in range(5):
         if candi[i][0] !=0:
@@ -96,24 +110,7 @@ for i in range(1,101):
                 candi[i][j]=int(candi[i][j])
             else :
                 candi[i][j]=candi[i][j]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 username_login=''
-
 def searchusers(idicari,username):
     found = True
     i=1
@@ -136,8 +133,6 @@ def searchcandi(idicari,username):
         if i > 101:
             found = False
             return False
-        
-
 def login():
     global username_login
     if username_login != '':
@@ -165,12 +160,6 @@ def login():
             elif i == 102 :
                 print('Username tidak terdaftar!')
                 break
-          
-            
-        
-
-                 
-#login nya harus diubah
 def logout():
     global username_login
     for i in range(1,103):
@@ -181,16 +170,6 @@ def logout():
         elif i == 102 :
             print("Logout gagal!")
             print("Anda belum login, silahkan login terlebih dahulu sebelum melakukan logout")
-
-
-
-
-# sisa = 100
-# for i in range(1,101):
-#     if candi[i][0]!=0:
-#         sisa -= 1
-
-
 def exit():
 
     keluar = input('Apakah Anda mau melakukan penyimpanan file yang sudah diubah? (y/n)')       
@@ -203,9 +182,6 @@ def exit():
         save()
         quit()
         #fungsi f04 and exit
-#belumberes
-
-
 def summonjin():
     if users[1][0]=='login':
         print('Jenis jin yang dapat dipanggil:')
@@ -254,9 +230,7 @@ def summonjin():
             print(f"Jin {username_jin} berhasil dipanggil!")
     else:
         print("Summon jin hanya dapat diakses bandung bondowoso")
-
-
-def hapusjin():#belum selesai ada fungsi save
+def hapusjin():
     if users[1][0]=='login':
         username_jin = input('Masukkan username jin : ')
         if searchusers(0,username_jin):
@@ -284,11 +258,6 @@ def hapusjin():#belum selesai ada fungsi save
             print('Tidak ada jin dengan username tersebut.')
     else :
         print('Hapus jin hanya dapat diakses Bandung Bondowoso.')
-
-
-
-
-
 def ubahjin():
     if users[1][0]=='login':
         username_jin = input('Masukkan username jin : ')
@@ -323,7 +292,6 @@ def ubahjin():
             print('Tidak ada jin dengan username tersebut.')
     else :
         print('ubahjin hanya dapat diakses Bandung Bondowoso')
-
 def kumpul():
     for i in range(103):
         if users[i][0]=='login':
@@ -339,8 +307,6 @@ def kumpul():
             else :
                 print('kumpul hanya dapat diakses jin pengumpul')
                 break
-
-
 def bangun():
     for i in range(103):
         if users[i][0] == 'login' :
@@ -387,18 +353,6 @@ def bangun():
             elif users[i][2] != 'jin_pembangun':
                 print('Hanya dapat diakses Jin Pembangun')
                 break
-
-# users[1][0]='login'
-# summonjin()
-
-# users[1][0]='Bondowoso'
-# print(users[0:5])
-# users[3][0]='login'
-# bangun()
-        
-
-
-
 def batchkumpul():
     total_jin_pengumpul=0
     pasir=0
@@ -419,17 +373,6 @@ def batchkumpul():
         print(f'Jin menemukan total {pasir} pasir, {batu} batu, dan {air} air.')
     else :
         print('Kumpul gagal. Anda tidak punya jin pengumpul. Silahkan summon terlebih dahulu.')
-
-# users[1][0]='login'
-# for i in range(1,4):
-#     bahan_bangunan[i][2]=random.randint(10,20)
-# for i in range(3,6):
-#     users[i][2]='jin_pembangun'
-
-# users[3][0]='sob'
-# users[4][0]='sobr'
-# users[5][0]='sobri'
-
 def batchbangun():
     total_jin_pembangun = 0
     total_batu = 0
@@ -526,7 +469,7 @@ def batchbangun():
                     print(f'Bangun gagal kurang {total_batu - bahan_bangunan[1][2]} batu dan {total_air - bahan_bangunan[3][2]} air. ')
                 elif kurang_air > 0 and kurang_pasir>0:
                     print(f'Bangun gagal kurang {total_pasir - bahan_bangunan[2][2]} pasir dan {total_air - bahan_bangunan[3][2]} air. ')
-                elif kurang_batu and kurang_pasir>0:
+                elif kurang_batu > 0 and kurang_pasir>0:
                     print(f'Bangun gagal kurang {total_pasir - bahan_bangunan[2][2]} pasir dan {total_batu - bahan_bangunan[1][2]} batu. ')
                 elif kurang_pasir>0:
                     print(f'Bangun gagal kurang {total_pasir - bahan_bangunan[2][2]} pasir.')
@@ -536,10 +479,6 @@ def batchbangun():
                     print(f'Bangun gagal kurang {total_air - bahan_bangunan[3][2]} air.')
     else :
         print("Hanya dapat diakses Bandung BOndowoso.")
-
-  
-        
-
 def laporanjin():
     if users[1][0] !='login':
         print('Laporan jin hanya dapat diakses oleh akun Bandung Bondowoso.')
@@ -585,8 +524,6 @@ def laporanjin():
         print(f'Jumlah Pasir: {pasir} unit')
         print(f'Jumlah Air: {air} unit')
         print(f'Jumlah Batu: {batu} unit')
-
-
 def laporancandi():
     total_candi= 0
     total_pasir = 0
@@ -630,7 +567,6 @@ def laporancandi():
             print(f'ID Candi Termurah: -')
     else :
         print('Laporan candi hanya dapat diakses oleh akun Bandung Bondowoso.')
-
 def terajin():
     totaljinpembangun=0
     for i in range(103):
@@ -701,15 +637,6 @@ def terajin():
                     
 
                 # iddicari = i
-
-
-
-
-
-
-# users[2][0]='login'
-
-
 def hancurkancandi():
     if users[2][0]=='login':
         id_hapus= int(input('Masukkan ID candi: '))
@@ -732,10 +659,6 @@ def hancurkancandi():
             print('Tidak ada candi dengan ID tersebut.')           
     else :
         print('Hancurkan Candi hanya dapat diakses oleh akun Roro Jongrang.')
-
-# for j in range(1,101):
-#     candi[j][0]= random.randint(1,100)
-# print(candi)
 def ayamberkokok():
     if users[2][0]== 'login':
         print('Kukuruyuk.. Kukuruyuk..')
@@ -758,80 +681,82 @@ def ayamberkokok():
             quit()
     else :
         print("Hanya bisa diakses roro jonggrang!")
-
-# def load()
-
-
 def help():
     print('=========== HELP ===========')
     if users[1][0]=='login':
         print('1. logout')
-        print('Deskripsi')
+        print('   Keluar dari akun saat ini')
         print('2. summonjin')
-        print('Deskripsi')
+        print('   Memanggil jin jahanam dari alam ghaib:Pengumpul atau Pembangun!')
         print('3. hapusjin')
-        print('Deskripsi')
+        print('   Menghapus jin jahanam')
         print('4. ubahjin')
-        print('Deskripsi')
+        print('   Mengubah jin pembangun menjadi pengumpul atau sebaliknya')
         print('5. batchkumpul')
-        print('Deskripsi')
+        print('   Mengumpulkan bahan dengan semua jin pengumpul')
         print('6. batchbangun')
-        print('Deskripsi')
+        print('   Membangun candi dengan semua jin pembangun')
         print('7. laporanjin')
-        print('Deskripsi')
+        print('   Melihat data laporan jin')
         print('8. laporancandi')
-        print('Deskripsi')
-        print('9. save')
-        print('deskripsi')
+        print('   Melihat data candi terbangun')
+        # print('9. save')
+        # print('   Menyimpan progress')
+        print('9. exit')
+        print('   Keluar dari program')
     elif users[2][0]=='login':
         print('1. logout')
-        print('Deskripsi')
+        print('   Keluar dari akun saat ini')
         print('2. hancurkancandi')
-        print('Deskripsi')
+        print('   Menghancurkan candi yang telah terbangun')
         print('3. ayamberkokok')
-        print('Deskripsi')
-        print('4. save')
-        print('Deskripsi')
+        print('   Menghentikan permainan dengan teriak ayam')
+        # print('4. save')
+        # print('   Menyimpan progress')
+        print('4. exit')
+        print('   Keluar dari program')
     else:
+        belumlogin=True
         for i in range(3,103):
             if users[i][0]=='login':
+                belumlogin = False
                 if users[i][2]=='jin_pembangun':
                     print('1. logout ')
-                    print('deskripsi')
+                    print('   Keluar dari akun saat ini')
                     print('2. bangun ')
-                    print('deskripsi')
-                    print('3. save ')
-                    print('deskripsi')
+                    print('   Membangun candi')
+                    # print('3. save ')
+                    # print('   Menyimpan progress')
+                    print('3. exit')
+                    print('   Keluar dari program')
                     break
                 #belum selesaii
-                else : #belum login
+                else : 
                     print('1. logout ')
-                    print('deskripsi')
+                    print('   Keluar dari akun')
                     print('2. kumpul ')
-                    print('deskripsi')
-                    print('3. save ')
-                    print('deskripsi')
+                    print('   Mengumpulkan bahan bangunan')
+                    # print('3. save ')
+                    # print('   Menyimpan progress')
+                    print('3. exit')
+                    print('   Keluar dari program')
                     break
-
-
-
-
-
-import argparse
-import os
-import sys
+                
+        if belumlogin:
+            print('1. login')
+            print('   Masuk ke dalam akun.')
+            print('2. exit')
+            print('   Keluar dari program')
+            print('3. save')
+            print('   Menyimpan Proses')
 def load():
     parser = argparse.ArgumentParser()
     parser.add_argument('path', type = str, nargs="?", const="")
     args = parser.parse_args()
-    folder = input("Masukkan nama folder penyimpanan: ")
-    parents_path = 'save' + '\\' + folder
-    print(args.path)
-    if folder =='':
-        print('Tidak ada nama folder yang diberikan!')
-    elif args.path:
-        print("Masukkan forder yang ingin dibuka!")
-    elif os.path.exists(f"{parents_path}{args.path}"):
+    parents_path = os.getcwd()+ '\\' + 'save'
+    if not args.path:
+        print("Tidak ada nama folder yang diberikan!")
+    elif os.path.exists(f"{parents_path}\\{args.path}"):
         print('Loading...')
         path_data_user = f"{parents_path}{args.path}\\user.csv"
         path_data_candi = f"{parents_path}{args.path}\\candi.csv"
@@ -839,12 +764,6 @@ def load():
         print('Selamat datang di program “Manajerial Candi”')
     else:
         print(f"Folder ,\"{args.path}\" tidak ditemukan.")
-
-
-
-
-
-
 def tocsv(file,data,n1,n2):
     string=''
     f = open(file, 'w+')
@@ -858,15 +777,15 @@ def tocsv(file,data,n1,n2):
         f.write(string)
         string=''
     f.close()
-
 def save():
+    
     folder = input('Masukkan nama folder: ')
     print('')
     print('')
     print('Saving...')
     print('')
     isExist = os.path.exists('save')
-    
+    logout()  
     if isExist:
         if os.path.exists(f'save\\{folder}'):
             tocsv(f'save\\{folder}\\user.csv',users,103,3)
@@ -879,7 +798,4 @@ def save():
             tocsv(f'save\\{folder}\\user.csv',users,103,0)
             tocsv(f'save\\{folder}\\candi.csv',candi,101,0)
             tocsv(f'save\\{folder}\\bahan_bangunan.csv',bahan_bangunan,4,0)
-    print(f'Berhasil menyimpan data di folder save/{folder} ! ')
-
-
-
+        print(f'Berhasil menyimpan data di folder save/{folder} ! ')
