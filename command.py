@@ -63,28 +63,31 @@ def searchcandi(idicari,username):
 
 def login():
     global username_login
-    
-    username = input("Username: ")
-    password = input('Password: ')
-    for i in range(1,103):
-        if users[i][0]=='login':
-            print('Login gagal!')
-            print(f'Anda telah login dengan username {username_login}, silahkan lakukan “logout” sebelum melakukan login kembali.')
-            break
-        elif users[i][0]==username :
-            if users[i][1]!=password:
-                print("Password salah!")  
+    if username_login != '':
+        print('Login gagal!')
+        print(f'Anda telah login dengan username {username_login}, silahkan lakukan “logout” sebelum melakukan login kembali.')
+    else :
+        username = input("Username: ")
+        password = input('Password: ')
+        for i in range(1,103):
+            if users[i][0]=='login':
+                print('Login gagal!')
+                print(f'Anda telah login dengan username {username_login}, silahkan lakukan “logout” sebelum melakukan login kembali.')
                 break
-            elif users[i][1]== password:
-                print(f"Selamat datang,{username}")
-                print("Masukkan command “help” untuk daftar command yang dapat kamu panggil.")
-                username_login = username
-                users[i][0]= 'login'
-                
-                break    
-        elif i == 102 :
-            print('Username tidak terdaftar!')
-            break
+            elif users[i][0]==username :
+                if users[i][1]!=password:
+                    print("Password salah!")  
+                    break
+                elif users[i][1]== password:
+                    print(f"Selamat datang,{username}")
+                    print("Masukkan command “help” untuk daftar command yang dapat kamu panggil.")
+                    username_login = username
+                    users[i][0]= 'login'
+                    
+                    break    
+            elif i == 102 :
+                print('Username tidak terdaftar!')
+                break
           
             
         
@@ -175,7 +178,8 @@ def summonjin():
         print("Summon jin hanya dapat diakses bandung bondowoso")
 
 
-
+users[1][0]='login'
+users[5][0]='sobri'
 def hapusjin():#belum selesai ada fungsi save
     if users[1][0]=='login':
         username_jin = input('Masukkan username jin : ')
@@ -197,12 +201,15 @@ def hapusjin():#belum selesai ada fungsi save
                         candi[i][3]=0
                         candi[i][4]=0
                         break
+                print('Jin telah berhasil dihapus dari alam gaib.')
+            else :
+                print("Jin gagal dihapus")
         else :
             print('Tidak ada jin dengan username tersebut.')
     else :
         print('Hapus jin hanya dapat diakses Bandung Bondowoso.')
 
-
+hapusjin()
 
 
 
@@ -243,7 +250,7 @@ def ubahjin():
         print('ubahjin hanya dapat diakses Bandung Bondowoso')
 
 def kumpul():
-    for i in range(3,103):
+    for i in range(103):
         if users[i][0]=='login':
             if users[i][2] == 'jin_pengumpul':
                 pasir = random.randint(0,5)
@@ -256,6 +263,7 @@ def kumpul():
                 break
             else :
                 print('kumpul hanya dapat diakses jin pengumpul')
+                break
 
 
 def bangun():
@@ -315,7 +323,7 @@ def bangun():
 # bangun()
 
 
-def batchkumpul(users,bahan_bangunan):
+def batchkumpul():
     total_jin_pengumpul=0
     pasir=0
     batu = 0 
@@ -338,7 +346,7 @@ def batchkumpul(users,bahan_bangunan):
 
 #def batchbangun(users,candi,bahan_bangunan):
 
-def laporanjin(users,candi,bahan_bangunan):
+def laporanjin():
     if users[1][0] !='login':
         print('Laporan jin hanya dapat diakses oleh akun Bandung Bondowoso.')
     else :
@@ -369,7 +377,7 @@ def laporanjin(users,candi,bahan_bangunan):
         print(f'Jumlah Batu: {batu} unit')
 
 
-def laporancandi(candi,users):
+def laporancandi():
     total_candi= 0
     total_pasir = 0
     total_batu = 0
@@ -414,7 +422,7 @@ def laporancandi(candi,users):
 # users[2][0]='login'
 
 
-def hancurkancandi(candi,users):
+def hancurkancandi():
     if users[2][0]=='login':
         id_hapus= int(input('Masukkan ID candi: '))
         for i in range(1,101):
@@ -440,7 +448,7 @@ def hancurkancandi(candi,users):
 # for j in range(1,101):
 #     candi[j][0]= random.randint(1,100)
 # print(candi)
-def ayamberkokok(candi):
+def ayamberkokok():
     print('Kukuruyuk.. Kukuruyuk..')
     jumlah_candi=0
     for i in range(1,101):
@@ -463,7 +471,7 @@ def ayamberkokok(candi):
 # def load()
 
 
-def help(users):
+def help():
     print('=========== HELP ===========')
     if users[1][0]=='login':
         print('1. logout')
@@ -506,7 +514,7 @@ def help(users):
             print('Deskripsi')
 
 
-def save(users,candi,bahan_bangunan):
+def save():
     folder = input('Masukkan nama folder: ')
     print('')
     print('')

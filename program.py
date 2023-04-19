@@ -1,11 +1,49 @@
 import csv
-import main
-users=[None for i in range(3)]
-with open('user.csv') as csv_file:
-    reader = csv.reader(csv_file,delimiter=';')
-    i = 0
-    for row in reader :
-            
-            users[i]=row
-            i+=1
-belumexit 
+import command
+from command import candi
+from command import users
+from command import bahan_bangunan
+import random
+username_login=''
+
+
+for j in range(1,4):
+    bahan_bangunan[j][2]=random.randint(50,100)
+while True:
+    masukan = input('>>> ')
+    if masukan =='login':
+        command.login()
+    elif masukan == 'logout':
+        command.logout()
+    elif masukan == 'summonjin':
+        command.summonjin()
+    elif masukan == 'ubahjin':
+        command.ubahjin()
+    elif masukan =='bangun':
+        command.bangun()
+    elif masukan =='hapusjin':
+        command.hapusjin()
+    elif masukan == 'kumpul':
+        command.kumpul()
+    elif masukan == 'batchkumpul':
+        command.batchkumpul()
+    elif masukan == 'help':
+        command.help()
+    elif masukan == 'laporanjin':
+        command.laporanjin()
+    elif masukan == 'laporancandi':
+        command.laporancandi()
+    elif masukan == 'hancurkancandi':
+        command.hancurkancandi()
+    elif masukan == 'ayamberkokok':
+        command.ayamberkokok()
+    elif masukan =='save':
+        command.save()
+    elif masukan == 'exit':
+        command.exit()
+    else :
+        print(f'{masukan} tidak ada di command list.')
+
+
+
+    
