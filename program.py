@@ -6,7 +6,8 @@ from command import bahan_bangunan
 import random
 # command.load()
 username_login=''
-
+for i in range(1,4):
+    bahan_bangunan[i][2]=random.randint(10,20)
 while True:
     masukan = input('>>> ')
     if masukan =='login':
@@ -43,7 +44,9 @@ while True:
         command.batchbangun()
     else :
         print(f'{masukan} tidak ada di command list.')
-
+    print(candi[0:6])
+    print(users[0:6])
+    print(bahan_bangunan)
 
 
     
