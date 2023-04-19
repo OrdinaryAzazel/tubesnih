@@ -7,8 +7,8 @@ import random
 username_login=''
 
 
-for j in range(1,4):
-    bahan_bangunan[j][2]=random.randint(50,100)
+# for j in range(1,4):
+#     bahan_bangunan[j][2]=random.randint(50,100)
 while True:
     masukan = input('>>> ')
     if masukan =='login':
@@ -41,6 +41,8 @@ while True:
         command.save()
     elif masukan == 'exit':
         command.exit()
+    elif masukan=='batchbangun':
+        command.batchbangun()
     else :
         print(f'{masukan} tidak ada di command list.')
 

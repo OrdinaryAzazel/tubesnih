@@ -39,7 +39,7 @@ username_login=''
 
 def searchusers(idicari,username):
     found = True
-    i=3
+    i=1
     while found:
         if users[i][idicari]== username:
             return True
@@ -148,11 +148,11 @@ def summonjin():
                 nomorjin= int(input('Masukkan nomor jenis jin yang ingin dipanggil: '))
             if nomorjin == 1 :
                 print("Memilih jin 'Pengumpul'.")
-                jenis_jin = 'jin_pengumpul'
+                jenis_jin ='jin_pengumpul'
 
             else :
                 print("Memilih jin 'Pembangun'.")
-                jenis_jin = 'jin_pembangun'
+                jenis_jin ='jin_pembangun'
 
             username_jin = input('Masukkan username jin: ')
             while searchusers(0,username_jin):
@@ -178,8 +178,6 @@ def summonjin():
         print("Summon jin hanya dapat diakses bandung bondowoso")
 
 
-users[1][0]='login'
-users[5][0]='sobri'
 def hapusjin():#belum selesai ada fungsi save
     if users[1][0]=='login':
         username_jin = input('Masukkan username jin : ')
@@ -209,7 +207,6 @@ def hapusjin():#belum selesai ada fungsi save
     else :
         print('Hapus jin hanya dapat diakses Bandung Bondowoso.')
 
-hapusjin()
 
 
 
@@ -267,60 +264,60 @@ def kumpul():
 
 
 def bangun():
-    global username_login
-    if searchusers(0,username_login):
-        for i in range(3,103):
-            if username_login == users[i][0]:
-                if users[i][2]=='jin_pembangun':   
-                    for j in range(1,101):
-                        idcandi=1 
-                        if candi[j][0] == 0:
-                            butuh_pasir = random.randint(1,5)
-                            butuh_air = random.randint(1,5)
-                            butuh_batu = random.randint(1,5)
-                            if bahan_bangunan[1][2] > butuh_batu and bahan_bangunan[2][2]>butuh_pasir and bahan_bangunan[3][2]>butuh_air:
-                                candi[j][0]=idcandi
-                                candi[j][2]=butuh_pasir
-                                candi[j][3]=butuh_batu
-                                candi[j][4]=butuh_air
-                                candi[j][1]=username_login
+    for i in range(103):
+        if users[i][0] == 'login' :
+            if users[i][2] == 'jin_pembangun':   
+                for j in range(1,101):
+                    idcandi=1 
+                    if candi[j][0] == 0:
+                        butuh_pasir = random.randint(1,5)
+                        butuh_air = random.randint(1,5)
+                        butuh_batu = random.randint(1,5)
+                        if bahan_bangunan[1][2] > butuh_batu and bahan_bangunan[2][2]>butuh_pasir and bahan_bangunan[3][2]>butuh_air:
+                            candi[j][0]=idcandi
+                            candi[j][2]=butuh_pasir
+                            candi[j][3]=butuh_batu
+                            candi[j][4]=butuh_air
+                            candi[j][1]=username_login
+                            bahan_bangunan[1][2] -=butuh_batu
+                            bahan_bangunan[2][2]-=butuh_pasir
+                            bahan_bangunan[3][2]-=butuh_air
+                            print('Candi berhasil dibangun')
+                            totalcandi=100
+                            for g in range(1,101):
+                                if candi[g][0] != 0:
+                                    totalcandi-=1
+                            if totalcandi >= 0:
+                                print(f'Sisa candi yang perlu dibangun: {totalcandi}.')
+                                break
+                            else:
+                                totalcandi=0
                                 bahan_bangunan[1][2] -=butuh_batu
                                 bahan_bangunan[2][2]-=butuh_pasir
                                 bahan_bangunan[3][2]-=butuh_air
-                                print('Candi berhasil dibangun')
-                                totalcandi=100
-                                for g in range(1,101):
-                                    if candi[g][0] != 0:
-                                        totalcandi-=1
-                                if totalcandi >= 0:
-                                    print(f'Sisa candi yang perlu dibangun: {totalcandi}.')
-                                    break
-                                else:
-                                    totalcandi=0
-                                    bahan_bangunan[1][2] -=butuh_batu
-                                    bahan_bangunan[2][2]-=butuh_pasir
-                                    bahan_bangunan[3][2]-=butuh_air
-                                    print('Candi berhasil dibangun.')
-                                    print('Sisa candi yang perlu dibangun: 0.')
-
-
-                            
-                            else :
-                                print('Bahan bangunan tidak mencukupi.')
-                                print('Candi tidak bisa dibangun!')
+                                print('Candi berhasil dibangun.')
+                                print('Sisa candi yang perlu dibangun: 0.')
                                 break
-
-
                         else :
-                            idcandi+=1
-                else:
-                    print('Hanya dapat diakses Jin Pembangun')
-    else:
-        print("Hanya dapat diakses Jin Pembangun")
-# username_login="sobri"
-# users[5][0]=username_login
-# users[5][2]='jin_pembangun'
+                            print('Bahan bangunan tidak mencukupi.')
+                            print('Candi tidak bisa dibangun!')
+                            break
+                    else :
+                        idcandi+=1
+                break
+            elif users[i][2] != 'jin_pembangun':
+                print('Hanya dapat diakses Jin Pembangun')
+                break
+
+# users[1][0]='login'
+# summonjin()
+
+# users[1][0]='Bondowoso'
+# print(users[0:5])
+# users[3][0]='login'
 # bangun()
+        
+
 
 
 def batchkumpul():
@@ -344,7 +341,92 @@ def batchkumpul():
     else :
         print('Kumpul gagal. Anda tidak punya jin pengumpul. Silahkan summon terlebih dahulu.')
 
-#def batchbangun(users,candi,bahan_bangunan):
+def batchbangun():
+    total_jin_pembangun = 0
+    total_batu = 0
+    total_pasir = 0
+    total_air = 0
+    totalcandi=100
+    for i in range(3,103):
+        if users[i][2]=='jin_pembangun':
+            total_jin_pembangun +=1
+    
+    if total_jin_pembangun == 0:
+        print('Bangun gagal. Anda tidak punya jin pembangun. Silahkan summon terlebih dahulu.')
+    else :
+        username_jin = ["kosong" for i in range(total_jin_pembangun)]
+        idjin =0
+        for i in range(3,103):
+            if users[i][2]=='jin_pembangun':
+                username_jin[idjin]=users[i][0]
+                idjin+=1
+
+
+
+        bahan=[[0 for i in range (3)]for j in range(total_jin_pembangun)]
+        for i in range(total_jin_pembangun):
+            for j in range(3):
+                bahan[i][j] = random.randint(1,5)
+                if j == 0 :
+                    total_batu += bahan[i][j]
+                elif j == 1:
+                    total_pasir += bahan[i][j]
+                else:
+                    total_air += bahan[i][j]
+        print(f'Mengerahkan {total_jin_pembangun} jin untuk membangun candi dengan total bahan {total_pasir} pasir, {total_batu} batu, dan {total_air} air.')
+        if bahan_bangunan[1][2] > total_batu and bahan_bangunan[2][2]>total_pasir and bahan_bangunan[3][2]>total_air:
+            for i in range(1,101):
+                    idcandi=1
+                    idusernamejin=0 
+                    if candi[i][0] == 0:
+                        # for j in range(total_jin_pembangun):
+                        
+                        candi[i][2]=bahan[idusernamejin][1]
+                        candi[i][3]=bahan[idusernamejin][0]
+                        candi[i][4]=bahan[idusernamejin][2]
+                            # bahan[j][k]=0
+                        candi[i][1]=username_jin[idusernamejin]
+                        candi[i][0]=idcandi
+                        idusernamejin+=1
+                        bahan_bangunan[1][2] -= total_batu            
+                        bahan_bangunan[2][2] -= total_pasir
+                        bahan_bangunan[3][2] -= total_air
+                        print(f'Jin berhasil membangun total {total_jin_pembangun} candi.')
+                        
+                            
+                    else :
+                        idcandi+=1
+            
+            # for g in range(1,101):
+            #     if candi[g][0] != 0:
+            #         totalcandi-=1   
+            # if totalcandi >= 0:
+            # bahan_bangunan[1][2] -= total_batu            
+            # bahan_bangunan[2][2] -= total_pasir
+            # bahan_bangunan[3][2] -= total_air
+                      
+                            
+                            # totalcandi=100
+                            # for g in range(1,101):
+                            #     if candi[g][0] != 0:
+                            #         totalcandi-=1
+                            
+                            #     print(f'Sisa candi yang perlu dibangun: {totalcandi}.')
+                            #     break
+                            # else:
+                            #     totalcandi=0
+                            #     bahan_bangunan[1][2] -=butuh_batu
+                            #     bahan_bangunan[2][2]-=butuh_pasir
+                            #     bahan_bangunan[3][2]-=butuh_air
+                            #     print('Candi berhasil dibangun.')
+                            #     print('Sisa candi yang perlu dibangun: 0.')
+                            #     break
+        else :
+            print(f'Bangun gagal {total_pasir - bahan_bangunan[2][2]} pasir, {total_batu - bahan_bangunan[1][2]} batu, dan {total_air - bahan_bangunan[3][2]} air. ')
+                     
+
+        
+        
 
 def laporanjin():
     if users[1][0] !='login':
@@ -386,7 +468,7 @@ def laporancandi():
     termurah = 0
     idtermurah=0
     idtermahal=0
-    if users[1][0] !='login': 
+    if users[1][0] =='login': 
         for i in range(1,101):
             if candi[i][0] != 0: #asumsi candi yang belum terbangun bernilai 0
                 total_candi +=1
@@ -503,15 +585,24 @@ def help():
         print('Deskripsi')
     else:
         for i in range(3,103):
-            if users[i][2]=='jin_pembangun':
-                print('Role Jin Pembangun')
-                print('1. ')
+            if users[i][0]=='login':
+                if users[i][2]=='jin_pembangun':
+                    print('1. logout ')
+                    print('deskripsi')
+                    print('2. bangun ')
+                    print('deskripsi')
+                    print('3. save ')
+                    print('deskripsi')
+                    break
                 #belum selesaii
-        else : #belum login
-            print('1. login')
-            print('Deskripsi')
-            print('2. exit')
-            print('Deskripsi')
+                else : #belum login
+                    print('1. logout ')
+                    print('deskripsi')
+                    print('2. kumpul ')
+                    print('deskripsi')
+                    print('3. save ')
+                    print('deskripsi')
+                    break
 
 
 def save():
