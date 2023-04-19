@@ -1,14 +1,6 @@
 
-import command,argparse,os
-from command import candi
-from command import users
-from command import bahan_bangunan
+import command
 
-
-
-username_login=''
-# for i in range(1,4):
-#     bahan_bangunan[i][2]=random.randint(10,20)
 while True:
     masukan = input('>>> ')
     if masukan =='login':
@@ -45,9 +37,6 @@ while True:
         command.batchbangun()
     else :
         print(f'{masukan} tidak ada di command list.')
-    # print(candi[0:6])
-    # print(users[0:6])
-    # print(bahan_bangunan)
-
+  
 
     

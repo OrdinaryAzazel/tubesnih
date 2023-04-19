@@ -429,36 +429,9 @@ def batchbangun():
                 bahan_bangunan[1][2] -= total_batu            
                 bahan_bangunan[2][2] -= total_pasir
                 bahan_bangunan[3][2] -= total_air
-                                
-                        
+                  
                 print(f'Jin berhasil membangun total {total_jin_pembangun} candi.')
-                
-
-                
-                # for g in range(1,101):
-                #     if candi[g][0] != 0:
-                #         totalcandi-=1   
-                # if totalcandi >= 0:
-                # bahan_bangunan[1][2] -= total_batu            
-                # bahan_bangunan[2][2] -= total_pasir
-                # bahan_bangunan[3][2] -= total_air
-                        
-                                
-                                # totalcandi=100
-                                # for g in range(1,101):
-                                #     if candi[g][0] != 0:
-                                #         totalcandi-=1
-                                
-                                #     print(f'Sisa candi yang perlu dibangun: {totalcandi}.')
-                                #     break
-                                # else:
-                                #     totalcandi=0
-                                #     bahan_bangunan[1][2] -=butuh_batu
-                                #     bahan_bangunan[2][2]-=butuh_pasir
-                                #     bahan_bangunan[3][2]-=butuh_air
-                                #     print('Candi berhasil dibangun.')
-                                #     print('Sisa candi yang perlu dibangun: 0.')
-                                #     break
+        
             else :
                 kurang_pasir=total_pasir - bahan_bangunan[2][2]
                 kurang_batu = total_batu - bahan_bangunan[1][2]
@@ -700,9 +673,9 @@ def help():
         print('   Melihat data laporan jin')
         print('8. laporancandi')
         print('   Melihat data candi terbangun')
-        # print('9. save')
-        # print('   Menyimpan progress')
-        print('9. exit')
+        print('9. save')
+        print('   Menyimpan progress')
+        print('10.exit')
         print('   Keluar dari program')
     elif users[2][0]=='login':
         print('1. logout')
@@ -711,9 +684,9 @@ def help():
         print('   Menghancurkan candi yang telah terbangun')
         print('3. ayamberkokok')
         print('   Menghentikan permainan dengan teriak ayam')
-        # print('4. save')
-        # print('   Menyimpan progress')
-        print('4. exit')
+        print('4. save')
+        print('   Menyimpan progress')
+        print('5. exit')
         print('   Keluar dari program')
     else:
         belumlogin=True
@@ -725,9 +698,9 @@ def help():
                     print('   Keluar dari akun saat ini')
                     print('2. bangun ')
                     print('   Membangun candi')
-                    # print('3. save ')
-                    # print('   Menyimpan progress')
-                    print('3. exit')
+                    print('3. save ')
+                    print('   Menyimpan progress')
+                    print('4. exit')
                     print('   Keluar dari program')
                     break
                 #belum selesaii
@@ -736,9 +709,9 @@ def help():
                     print('   Keluar dari akun')
                     print('2. kumpul ')
                     print('   Mengumpulkan bahan bangunan')
-                    # print('3. save ')
-                    # print('   Menyimpan progress')
-                    print('3. exit')
+                    print('3. save ')
+                    print('   Menyimpan progress')
+                    print('4. exit')
                     print('   Keluar dari program')
                     break
                 
