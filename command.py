@@ -7,9 +7,7 @@ parents_path = os.getcwd()+ '\\' + 'save'
 
 if not args.path:
     print("Tidak ada nama folder yang diberikan!")
-    path_data_user = f"{parents_path}\\user.csv"
-    path_data_candi = f"{parents_path}\\candi.csv"
-    path_data_bahan_bangunan = f"{parents_path}\\bahan_bangunan.csv"
+    exit()
 elif os.path.exists(f"{parents_path}\\{args.path}"):
     print('Loading...')
     path_data_user = f"{parents_path}\\{args.path}\\user.csv"
@@ -17,10 +15,8 @@ elif os.path.exists(f"{parents_path}\\{args.path}"):
     path_data_bahan_bangunan = f"{parents_path}\\{args.path}\\bahan_bangunan.csv"
     print('Selamat datang di program “Manajerial Candi”')
 else:
-    path_data_user = f"{parents_path}\\user.csv"
-    path_data_candi = f"{parents_path}\\candi.csv"
-    path_data_bahan_bangunan = f"{parents_path}\\bahan_bangunan.csv"
     print(f"Folder ,\"{args.path}\" tidak ditemukan.")
+    exit()
 
 def read_user(file_csv):
     with open(file_csv) as csv:
@@ -46,7 +42,7 @@ users=read_user(path_data_user)
 def read_bahan(file_csv):
     with open(file_csv) as csv:
         data = csv.readlines()
-        listdata = [['kosong' for i in range(3)] for i in range (4)]
+        listdata = [['kosong' for j in range(3)] for i in range (4)]
         i = 0
         for baris in data:
             j = 0
@@ -63,16 +59,8 @@ def read_bahan(file_csv):
             i += 1
         return listdata
 bahan_bangunan=read_bahan(path_data_bahan_bangunan)
-def procedure_bahan():
-    bahan_bangunan[1][0]='batu'
-    bahan_bangunan[1][1]='bahan keras nih kayanya'
-    bahan_bangunan[2][0]='pasir'
-    bahan_bangunan[2][1]='bahan lembut inimah'
-    bahan_bangunan[3][0]='air'
-    bahan_bangunan[3][1]='bahan cairr banget'
-    for i in range(1,4):
-        bahan_bangunan[i][2]=0
-procedure_bahan()
+for i in range(1,4):
+    bahan_bangunan[i][2]=int(bahan_bangunan[i][2])
 def read_candi(file_csv):
     with open(file_csv) as csv: 
         data = csv.readlines()
@@ -130,46 +118,46 @@ def searchcandi(idicari,username):
             return True
         else :
             i+=1
-        if i > 101:
+        if i > 100:
             found = False
             return False
 def login():
     global username_login
-    if username_login != '':
-        print('Login gagal!')
-        print(f'Anda telah login dengan username {username_login}, silahkan lakukan “logout” sebelum melakukan login kembali.')
-    else :
+    if username_login == '':
         username = input("Username: ")
         password = input('Password: ')
-        for i in range(1,103):
-            if users[i][0]=='login':
-                print('Login gagal!')
-                print(f'Anda telah login dengan username {username_login}, silahkan lakukan “logout” sebelum melakukan login kembali.')
-                break
-            elif users[i][0]==username :
-                if users[i][1]!=password:
-                    print("Password salah!")  
-                    break
-                elif users[i][1]== password:
-                    print(f"Selamat datang,{username}")
-                    print("Masukkan command “help” untuk daftar command yang dapat kamu panggil.")
-                    username_login = username
-                    users[i][0]= 'login'
-                    
-                    break    
-            elif i == 102 :
-                print('Username tidak terdaftar!')
-                break
+        
+        
+        if searchusers(0,username):
+            for i in range(1,103):
+                if users[i][0]==username:
+                
+                    if users[i][1]!=password:
+                        print("Password salah!")
+                        
+                        break
+                    elif users[i][1]== password:
+                        print(f"Selamat datang, {username}")
+                        print("Masukkan command “help” untuk daftar command yang dapat kamu panggil.")
+                        username_login = username
+                        # users[i][0]= 'login'
+                        
+                        break    
+        else :
+            print('Username tidak terdaftar!')
+    else :
+        print('Login gagal!')
+        print(f'Anda telah login dengan username {username_login}, silahkan lakukan “logout” sebelum melakukan login kembali.')
 def logout():
     global username_login
-    for i in range(1,103):
-        if users[i][0]=='login':
-            users[i][0]=username_login
-            username_login=''
-            break
-        elif i == 102 :
-            print("Logout gagal!")
-            print("Anda belum login, silahkan login terlebih dahulu sebelum melakukan logout")
+    # for i in range(1,103):
+    if username_login !='':
+            # users[i][0]=username_login
+        username_login=''
+        
+    else:
+        print("Logout gagal!")
+        print("Anda belum login, silahkan login terlebih dahulu sebelum melakukan logout")
 def exit():
 
     keluar = input('Apakah Anda mau melakukan penyimpanan file yang sudah diubah? (y/n)')       
@@ -183,7 +171,8 @@ def exit():
         quit()
         #fungsi f04 and exit
 def summonjin():
-    if users[1][0]=='login':
+    global username_login
+    if username_login == 'Bondowoso':
         print('Jenis jin yang dapat dipanggil:')
         print(" (1) Pengumpul - Bertugas mengumpulkan bahan bangunan")
         print(" (2) Pembangun - Bertugas membangun candi")
@@ -231,12 +220,13 @@ def summonjin():
     else:
         print("Summon jin hanya dapat diakses bandung bondowoso")
 def hapusjin():
-    if users[1][0]=='login':
+    global username_login
+    if username_login == 'Bondowoso':
         username_jin = input('Masukkan username jin : ')
         if searchusers(0,username_jin):
             konfirmasi = input('Apakah anda yakin ingin menghapus jin dengan username Jin1 (Y/N)? ')
             while konfirmasi != 'n' and konfirmasi !='N' and konfirmasi != 'y' and konfirmasi !='Y' :
-                konfirmasi = input('Apakah anda yakin ingin menghapus jin dengan username Jin1 (Y/N)? ')
+                konfirmasi = input(f'Apakah anda yakin ingin menghapus jin dengan username {username_jin} (Y/N)? ')
             if konfirmasi == 'y' or konfirmasi == 'Y':
                 for i in range(3,102):
                     if users[i][0] == username_jin:
@@ -244,13 +234,13 @@ def hapusjin():
                         users[i][1] = 'kosong'
                         users[i][2] = 'kosong'
                 for i in range(1,101): #bila jin sudah membangun candi
-                    if candi[i][0]==username_jin:
-                        candi[i][0]='0' #candi dihapus
+                    if candi[i][1]==username_jin:
+                        candi[i][0]= 0 
                         candi[i][1]='kosong'
                         candi[i][2]=0
                         candi[i][3]=0
                         candi[i][4]=0
-                        break
+                        
                 print('Jin telah berhasil dihapus dari alam gaib.')
             else :
                 print("Jin gagal dihapus")
@@ -259,7 +249,8 @@ def hapusjin():
     else :
         print('Hapus jin hanya dapat diakses Bandung Bondowoso.')
 def ubahjin():
-    if users[1][0]=='login':
+    global username_login
+    if username_login == 'Bondowoso':
         username_jin = input('Masukkan username jin : ')
         if searchusers(0,username_jin):
             for i in range(3,103):
@@ -293,92 +284,104 @@ def ubahjin():
     else :
         print('ubahjin hanya dapat diakses Bandung Bondowoso')
 def kumpul():
-    for i in range(103):
-        if users[i][0]=='login':
-            if users[i][2] == 'jin_pengumpul':
-                pasir = random.randint(0,5)
-                batu = random.randint(0,5)
-                air = random.randint(0,5)
-                bahan_bangunan[1][2]+=batu
-                bahan_bangunan[2][2] += pasir
-                bahan_bangunan[3][2]+= air
-                print(f'Jin menemukan {pasir} pasir, {batu} batu, dan {air} air.')
-                break
-            else :
-                print('kumpul hanya dapat diakses jin pengumpul')
-                break
+    global username_login
+    if username_login == '':
+        print('Anda belum login')
+    else :
+        for i in range(103):
+            if users[i][0]==username_login:
+                if users[i][2] == 'jin_pengumpul':
+                    pasir = random.randint(0,5)
+                    batu = random.randint(0,5)
+                    air = random.randint(0,5)
+                    bahan_bangunan[1][2]+=batu
+                    bahan_bangunan[2][2] += pasir
+                    bahan_bangunan[3][2]+= air
+                    print(f'Jin menemukan {pasir} pasir, {batu} batu, dan {air} air.')
+                    break
+                else :
+                    print('kumpul hanya dapat diakses jin pengumpul')
+                    break
 def bangun():
-    for i in range(103):
-        if users[i][0] == 'login' :
-            if users[i][2] == 'jin_pembangun':   
-                idcandi=1
-                for j in range(1,101):
-                     
-                    if candi[j][0] == 0:
-                        butuh_pasir = random.randint(1,5)
-                        butuh_air = random.randint(1,5)
-                        butuh_batu = random.randint(1,5)
-                        if bahan_bangunan[1][2] > butuh_batu and bahan_bangunan[2][2]>butuh_pasir and bahan_bangunan[3][2]>butuh_air:
-                            candi[j][0]=idcandi
-                            candi[j][2]=butuh_pasir
-                            candi[j][3]=butuh_batu
-                            candi[j][4]=butuh_air
-                            candi[j][1]=username_login
-                            bahan_bangunan[1][2] -=butuh_batu
-                            bahan_bangunan[2][2]-=butuh_pasir
-                            bahan_bangunan[3][2]-=butuh_air
-                            print('Candi berhasil dibangun')
-                            totalcandi=100
-                            for g in range(1,101):
-                                if candi[g][0] != 0:
-                                    totalcandi-=1
-                            if totalcandi >= 0:
-                                print(f'Sisa candi yang perlu dibangun: {totalcandi}.')
-                                break
-                            else:
-                                totalcandi=0
+    global username_login
+    if username_login == '':
+        print('Anda belum login.')
+    else :
+        for i in range(103):
+            if users[i][0] == username_login :
+                if users[i][2] == 'jin_pembangun':   
+                    idcandi=1
+                    for j in range(1,101):
+                        if candi[j][0] == 0:
+                            butuh_pasir = random.randint(1,5)
+                            butuh_air = random.randint(1,5)
+                            butuh_batu = random.randint(1,5)
+                            if bahan_bangunan[1][2] > butuh_batu and bahan_bangunan[2][2]>butuh_pasir and bahan_bangunan[3][2]>butuh_air:
+                                candi[j][0]=idcandi
+                                candi[j][2]=butuh_pasir
+                                candi[j][3]=butuh_batu
+                                candi[j][4]=butuh_air
+                                candi[j][1]=username_login
                                 bahan_bangunan[1][2] -=butuh_batu
                                 bahan_bangunan[2][2]-=butuh_pasir
                                 bahan_bangunan[3][2]-=butuh_air
-                                print('Candi berhasil dibangun.')
-                                print('Sisa candi yang perlu dibangun: 0.')
+                                print('Candi berhasil dibangun')
+                                totalcandi=100
+                                for g in range(1,101):
+                                    if candi[g][0] != 0:
+                                        totalcandi-=1
+                                if totalcandi >= 0:
+                                    print(f'Sisa candi yang perlu dibangun: {totalcandi}.')
+                                    break
+                                else:
+                                    totalcandi=0
+                                    bahan_bangunan[1][2] -=butuh_batu
+                                    bahan_bangunan[2][2]-=butuh_pasir
+                                    bahan_bangunan[3][2]-=butuh_air
+                                    print('Candi berhasil dibangun.')
+                                    print(f'Sisa candi yang perlu dibangun: {totalcandi}.')
+                                    break
+                            else :
+                                print('Bahan bangunan tidak mencukupi.')
+                                print('Candi tidak bisa dibangun!')
                                 break
                         else :
-                            print('Bahan bangunan tidak mencukupi.')
-                            print('Candi tidak bisa dibangun!')
-                            break
-                    else :
-                        idcandi+=1
-                break
-            elif users[i][2] != 'jin_pembangun':
-                print('Hanya dapat diakses Jin Pembangun')
-                break
+                            idcandi+=1
+                    break
+                else:
+                    print('Hanya dapat diakses Jin Pembangun')
+                    break
 def batchkumpul():
     total_jin_pengumpul=0
     pasir=0
     batu = 0 
     air = 0
-    for i in range(3,103):
-        if users[i][2]=='jin_pengumpul':
-            total_jin_pengumpul +=1
-    if total_jin_pengumpul > 0 :
-        print(f'Mengerahkan {total_jin_pengumpul} jin untuk mengumpulkan bahan.')
-        for i in range(total_jin_pengumpul):
-            pasir += random.randint(0,5)
-            batu += random.randint(0,5)
-            air += random.randint(0,5)
-        bahan_bangunan[1][2]+=batu
-        bahan_bangunan[2][2] += pasir
-        bahan_bangunan[3][2]+= air
-        print(f'Jin menemukan total {pasir} pasir, {batu} batu, dan {air} air.')
+    global username_login
+    if username_login == 'Bondowoso':
+        for i in range(3,103):
+            if users[i][2]=='jin_pengumpul':
+                total_jin_pengumpul +=1
+        if total_jin_pengumpul > 0 :
+            print(f'Mengerahkan {total_jin_pengumpul} jin untuk mengumpulkan bahan.')
+            for i in range(total_jin_pengumpul):
+                pasir += random.randint(0,5)
+                batu += random.randint(0,5)
+                air += random.randint(0,5)
+            bahan_bangunan[1][2]+=batu
+            bahan_bangunan[2][2] += pasir
+            bahan_bangunan[3][2]+= air
+            print(f'Jin menemukan total {pasir} pasir, {batu} batu, dan {air} air.')
+        else :
+            print('Kumpul gagal. Anda tidak punya jin pengumpul. Silahkan summon terlebih dahulu.')
     else :
-        print('Kumpul gagal. Anda tidak punya jin pengumpul. Silahkan summon terlebih dahulu.')
+        print('batchbangun hanya dapat diakses Bandung Bondowoso.')
 def batchbangun():
     total_jin_pembangun = 0
     total_batu = 0
     total_pasir = 0
     total_air = 0
-    if users[1][0]=='login':
+    global username_login
+    if username_login == 'Bondowoso':
         for i in range(3,103):
             if users[i][2]=='jin_pembangun':
                 total_jin_pembangun +=1
@@ -407,7 +410,7 @@ def batchbangun():
                         total_air += bahan[i][j]
             print(f'Mengerahkan {total_jin_pembangun} jin untuk membangun candi dengan total bahan {total_pasir} pasir, {total_batu} batu, dan {total_air} air.')
             if bahan_bangunan[1][2] > total_batu and bahan_bangunan[2][2]>total_pasir and bahan_bangunan[3][2]>total_air:
-                looping =total_jin_pembangun
+                
                 idcandi=1
                 idusernamejin=0 
                 for i in range(1,101):
@@ -420,7 +423,6 @@ def batchbangun():
                             candi[i][0]=idcandi
                             idusernamejin+=1
                             idcandi+=1
-                            looping-=1
                             if idusernamejin == total_jin_pembangun :
                                 break
                 
@@ -453,7 +455,8 @@ def batchbangun():
     else :
         print("Hanya dapat diakses Bandung BOndowoso.")
 def laporanjin():
-    if users[1][0] !='login':
+    global username_login
+    if username_login != 'Bondowoso':
         print('Laporan jin hanya dapat diakses oleh akun Bandung Bondowoso.')
     else :
         total_jin = 0
@@ -483,12 +486,9 @@ def laporanjin():
             jin= terajin()
             jin_terajin=jin[0]
             jin_termalas=jin[1]
-        
+            if jin_termalas == jin_terajin:
+                jin_termalas= '-'
 
-        
-        
-        #cari jin terajin termalas
-        # output
         print(f'Total Jin: {total_jin}')
         print(f'Total Jin Pengumpul: {total_jin_pengumpul}')
         print(f'Total Jin Pembangun: {total_jin_pembangun}')
@@ -508,7 +508,8 @@ def laporancandi():
     idtermahal=0
     rajinbangun = 0
     malesbangun =0
-    if users[1][0] =='login': 
+    global username_login
+    if username_login == 'Bondowoso': 
         for i in range(1,101):
             if candi[i][0] != 0: #asumsi candi yang belum terbangun bernilai 0
                 total_candi +=1
@@ -545,65 +546,145 @@ def terajin():
     for i in range(103):
         if users[i][2] == 'jin_pembangun':
             totaljinpembangun +=1
-    jin_dan_totalcandi=[['kosong' for i in range(2)]for j in range(totaljinpembangun)]
-    g= 0
-    for i in range(3,103):
-        if users[i][2] == 'jin_pembangun':
-            jin_dan_totalcandi[g][0]=users[i][0]
-            g+=1
-    for i in range(totaljinpembangun):
-        jin_dan_totalcandi[i][1]=0
+    if totaljinpembangun==0:
+        totalcandi = 0
+        for i in range(1,101):
+            if candi[i][0] !=0:
+                totalcandi +=1
+        if totalcandi==0:
+            jin=['-' for i in range(2)]
+            return(jin)
+        else :
+            jin_dan_totalcandi=[['kosong' for i in range(2)]for j in range(totalcandi)]
+            for i in range(1,101):
+                g=0
+                if candi[i][0] !=0:
+                    while True:
+                        if jin_dan_totalcandi[g][0]!=candi[i][1]:
+                            jin_dan_totalcandi[g][0]=candi[i][1]
+                            g=0
+                            break
+                        else :
+                            g+=1
+                        if g == totalcandi:
+                            break
 
-    for i in range(1,101):
-        if candi[i][0] !=0 :
-            j=0
-            while True:
-                
-                if jin_dan_totalcandi[j][0]==candi[i][1]:
-                    jin_dan_totalcandi[j][1]+=1
-                    break
-                else :
-                    j+=1
-    print(jin_dan_totalcandi)
-    terbanyak=0
-    
-    iddicarimax=0
-    for i in range(totaljinpembangun):
-        if jin_dan_totalcandi[i][0] != 'kosong':
-            
-            if jin_dan_totalcandi[i][1]>terbanyak:
-                iddicarimax=i
-                terbanyak = jin_dan_totalcandi[i][1]
-            elif jin_dan_totalcandi[i][1]==terbanyak:
-                if jin_dan_totalcandi[i][1]==jin_dan_totalcandi[iddicarimax][1]:
-                    jin1=jin_dan_totalcandi[i][0]
-                    jin2=jin_dan_totalcandi[iddicarimax][0]
-                    if jin1<jin2:
+            for i in range(totalcandi):
+                jin_dan_totalcandi[i][1]=0
+
+            for i in range(1,101):
+                if candi[i][0] !=0 :
+                    j=0
+                    while True:
+                        if jin_dan_totalcandi[j][0]==candi[i][1]:
+                            jin_dan_totalcandi[j][1]+=1
+                            break
+                        else :
+                            j+=1
+                        if j == totalcandi:
+                            break
+            terbanyak=0
+        
+            iddicarimax=0
+            for i in range(totalcandi):
+                if jin_dan_totalcandi[i][0] != 'kosong':
+                    
+                    if jin_dan_totalcandi[i][1]>terbanyak:
                         iddicarimax=i
                         terbanyak = jin_dan_totalcandi[i][1]
-                    else :
-                        terbanyak = jin_dan_totalcandi[iddicarimax][1]
-    tersedikit=terbanyak
-    iddicarimin=0
-    for i in range(totaljinpembangun):
-        if jin_dan_totalcandi[i][0] != 'kosong':
-            if jin_dan_totalcandi[i][1]<tersedikit:
-                iddicarimin=i
-                tersedikit = jin_dan_totalcandi[i][1]
-            elif jin_dan_totalcandi[i][1]==tersedikit:
-                if jin_dan_totalcandi[i][1]==jin_dan_totalcandi[iddicarimin][1]:
-                    jin1=jin_dan_totalcandi[i][0]
-                    jin2=jin_dan_totalcandi[iddicarimin][0]
-                    if jin1>jin2:
+                    elif jin_dan_totalcandi[i][1]==terbanyak:
+                        if jin_dan_totalcandi[i][1]==jin_dan_totalcandi[iddicarimax][1]:
+                            jin1=jin_dan_totalcandi[i][0]
+                            jin2=jin_dan_totalcandi[iddicarimax][0]
+                            if jin1<jin2:
+                                iddicarimax=i
+                                terbanyak = jin_dan_totalcandi[i][1]
+                            else :
+                                terbanyak = jin_dan_totalcandi[iddicarimax][1]
+            tersedikit=terbanyak
+            iddicarimin=0
+            for i in range(totalcandi):
+                if jin_dan_totalcandi[i][0] != 'kosong':
+                    if jin_dan_totalcandi[i][1]<tersedikit:
                         iddicarimin=i
                         tersedikit = jin_dan_totalcandi[i][1]
+                    elif jin_dan_totalcandi[i][1]==tersedikit:
+                        if jin_dan_totalcandi[i][1]==jin_dan_totalcandi[iddicarimin][1]:
+                            jin1=jin_dan_totalcandi[i][0]
+                            jin2=jin_dan_totalcandi[iddicarimin][0]
+                            if jin1>jin2:
+                                iddicarimin=i
+                                tersedikit = jin_dan_totalcandi[i][1]
+                            else :
+                                tersedikit = jin_dan_totalcandi[iddicarimin][1]
+            jin=['kosong' for i in range(2)]
+            jin[0]=jin_dan_totalcandi[iddicarimax][0]
+            jin[1]=jin_dan_totalcandi[iddicarimin][0]
+            # print(jin)
+            return(jin)
+
+    else :
+    
+        jin_dan_totalcandi=[['kosong' for i in range(2)]for j in range(totaljinpembangun)]
+        g= 0
+        for i in range(3,103):
+            if users[i][2] == 'jin_pembangun':
+                jin_dan_totalcandi[g][0]=users[i][0]
+                g+=1
+        for i in range(totaljinpembangun):
+            jin_dan_totalcandi[i][1]=0
+
+        for i in range(1,101):
+            if candi[i][0] !=0 :
+                j=0
+                while True:
+                    if jin_dan_totalcandi[j][0]==candi[i][1]:
+                        jin_dan_totalcandi[j][1]+=1
+                        break
                     else :
-                        tersedikit = jin_dan_totalcandi[iddicarimin][1]
-    jin=['kosong' for i in range(2)]
-    jin[0]=jin_dan_totalcandi[iddicarimax][0]
-    jin[1]=jin_dan_totalcandi[iddicarimin][0]
-    # print(jin)
-    return(jin)
+                        j+=1
+                    if j == totaljinpembangun:
+                        break
+        
+        terbanyak=0
+        
+        iddicarimax=0
+        for i in range(totaljinpembangun):
+            if jin_dan_totalcandi[i][0] != 'kosong':
+                
+                if jin_dan_totalcandi[i][1]>terbanyak:
+                    iddicarimax=i
+                    terbanyak = jin_dan_totalcandi[i][1]
+                elif jin_dan_totalcandi[i][1]==terbanyak:
+                    if jin_dan_totalcandi[i][1]==jin_dan_totalcandi[iddicarimax][1]:
+                        jin1=jin_dan_totalcandi[i][0]
+                        jin2=jin_dan_totalcandi[iddicarimax][0]
+                        if jin1<jin2:
+                            iddicarimax=i
+                            terbanyak = jin_dan_totalcandi[i][1]
+                        else :
+                            terbanyak = jin_dan_totalcandi[iddicarimax][1]
+        tersedikit=terbanyak
+        iddicarimin=0
+        for i in range(totaljinpembangun):
+            if jin_dan_totalcandi[i][0] != 'kosong':
+                if jin_dan_totalcandi[i][1]<tersedikit:
+                    iddicarimin=i
+                    tersedikit = jin_dan_totalcandi[i][1]
+                elif jin_dan_totalcandi[i][1]==tersedikit:
+                    if jin_dan_totalcandi[i][1]==jin_dan_totalcandi[iddicarimin][1]:
+                        jin1=jin_dan_totalcandi[i][0]
+                        jin2=jin_dan_totalcandi[iddicarimin][0]
+                        if jin1>jin2:
+                            iddicarimin=i
+                            tersedikit = jin_dan_totalcandi[i][1]
+                        else :
+                            tersedikit = jin_dan_totalcandi[iddicarimin][1]
+        jin=['kosong' for i in range(2)]
+        jin[0]=jin_dan_totalcandi[iddicarimax][0]
+        jin[1]=jin_dan_totalcandi[iddicarimin][0]
+        # print(jin)
+        return(jin)
 
 
                 
@@ -611,29 +692,32 @@ def terajin():
 
                 # iddicari = i
 def hancurkancandi():
-    if users[2][0]=='login':
+    global username_login
+    if username_login=='Roro':
         id_hapus= int(input('Masukkan ID candi: '))
-        for i in range(1,101):
-            if id_hapus==candi[i][0]:
-                konfirmasi = input(f"Apakah anda yakin ingin menghancurkan candi ID: {id_hapus} (Y/N)? ")
-                while konfirmasi != 'Y' and konfirmasi != 'y' and konfirmasi != 'N' and konfirmasi != 'n':
+        if searchcandi(0,id_hapus):
+            for i in range(1,101):
+                if id_hapus==candi[i][0]:
                     konfirmasi = input(f"Apakah anda yakin ingin menghancurkan candi ID: {id_hapus} (Y/N)? ")
-                if konfirmasi == 'y' or konfirmasi =='Y':
-                    candi[i][1]='kosong'
-                    for j in range(5):
-                        if j!=1:
-                            candi[i][j]=0
-                    print('Candi telah berhasil dihancurkan.')
-                    
-                    break
-                else :
-                    print('Candi tidak dihancurkan.')
+                    while konfirmasi != 'Y' and konfirmasi != 'y' and konfirmasi != 'N' and konfirmasi != 'n':
+                        konfirmasi = input(f"Apakah anda yakin ingin menghancurkan candi ID: {id_hapus} (Y/N)? ")
+                    if konfirmasi == 'y' or konfirmasi =='Y':
+                        candi[i][1]='kosong'
+                        for j in range(5):
+                            if j!=1:
+                                candi[i][j]=0
+                        print('Candi telah berhasil dihancurkan.')
+                        
+                        break
+                    else :
+                        print('Candi tidak dihancurkan.')
         else :
             print('Tidak ada candi dengan ID tersebut.')           
     else :
-        print('Hancurkan Candi hanya dapat diakses oleh akun Roro Jongrang.')
+        print('Hancurkancandi hanya dapat diakses oleh akun Roro Jongrang.')
 def ayamberkokok():
-    if users[2][0]== 'login':
+    global username_login
+    if username_login== 'Roro':
         print('Kukuruyuk.. Kukuruyuk..')
         jumlah_candi=0
         for i in range(1,101):
@@ -655,8 +739,9 @@ def ayamberkokok():
     else :
         print("Hanya bisa diakses roro jonggrang!")
 def help():
+    global username_login
     print('=========== HELP ===========')
-    if users[1][0]=='login':
+    if username_login == 'Bondowoso':
         print('1. logout')
         print('   Keluar dari akun saat ini')
         print('2. summonjin')
@@ -677,7 +762,7 @@ def help():
         print('   Menyimpan progress')
         print('10.exit')
         print('   Keluar dari program')
-    elif users[2][0]=='login':
+    elif username_login == 'Roro':
         print('1. logout')
         print('   Keluar dari akun saat ini')
         print('2. hancurkancandi')
@@ -691,7 +776,7 @@ def help():
     else:
         belumlogin=True
         for i in range(3,103):
-            if users[i][0]=='login':
+            if users[i][0]==username_login:
                 belumlogin = False
                 if users[i][2]=='jin_pembangun':
                     print('1. logout ')
@@ -705,6 +790,7 @@ def help():
                     break
                 #belum selesaii
                 else : 
+                    belumlogin = False
                     print('1. logout ')
                     print('   Keluar dari akun')
                     print('2. kumpul ')
@@ -720,8 +806,6 @@ def help():
             print('   Masuk ke dalam akun.')
             print('2. exit')
             print('   Keluar dari program')
-            print('3. save')
-            print('   Menyimpan Proses')
 def load():
     parser = argparse.ArgumentParser()
     parser.add_argument('path', type = str, nargs="?", const="")
@@ -751,24 +835,25 @@ def tocsv(file,data,n1,n2):
         string=''
     f.close()
 def save():
-    
-    folder = input('Masukkan nama folder: ')
-    print('')
-    print('')
-    print('Saving...')
-    print('')
-    isExist = os.path.exists('save')
-    logout()  
-    if isExist:
-        if os.path.exists(f'save\\{folder}'):
-            tocsv(f'save\\{folder}\\user.csv',users,103,3)
-            tocsv(f'save\\{folder}\\candi.csv',candi,101,5)
-            tocsv(f'save\\{folder}\\bahan_bangunan.csv',bahan_bangunan,1,3)
-        else :
+    if username_login !='':
+        folder = input('Masukkan nama folder: ')
+        print('')
+        print('')
+        print('Saving...')
+        print('')
+        isExist = os.path.exists('save')  
+        if isExist:
+            if os.path.exists(f'save\\{folder}'):
+                tocsv(f'save\\{folder}\\user.csv',users,103,3)
+                tocsv(f'save\\{folder}\\candi.csv',candi,101,5)
+                tocsv(f'save\\{folder}\\bahan_bangunan.csv',bahan_bangunan,4,3)
+            else :
 
-            os.makedirs(f'save\\{folder}')
-            print(f'Membuat folder save/{folder}!')
-            tocsv(f'save\\{folder}\\user.csv',users,103,0)
-            tocsv(f'save\\{folder}\\candi.csv',candi,101,0)
-            tocsv(f'save\\{folder}\\bahan_bangunan.csv',bahan_bangunan,4,0)
-        print(f'Berhasil menyimpan data di folder save/{folder} ! ')
+                os.makedirs(f'save\\{folder}')
+                print(f'Membuat folder save/{folder}!')
+                tocsv(f'save\\{folder}\\user.csv',users,103,3)
+                tocsv(f'save\\{folder}\\candi.csv',candi,101,5)
+                tocsv(f'save\\{folder}\\bahan_bangunan.csv',bahan_bangunan,4,3)
+            print(f'Berhasil menyimpan data di folder save/{folder} ! ')
+    else :
+        print('Anda harus login terlebih dahulu!')
