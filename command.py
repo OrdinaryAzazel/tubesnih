@@ -59,8 +59,16 @@ def read_bahan(file_csv):
             i += 1
         return listdata
 bahan_bangunan=read_bahan(path_data_bahan_bangunan)
-for i in range(1,4):
-    bahan_bangunan[i][2]=int(bahan_bangunan[i][2])
+def procedure_bangunan():
+    bahan_bangunan[1][0]='batu'
+    bahan_bangunan[2][0]='pasir'
+    bahan_bangunan[3][0]='air'
+    bahan_bangunan[1][1]='bahan keras'
+    bahan_bangunan[2][1]='bahan lembut'
+    bahan_bangunan[3][1]='bahan cair'
+    for i in range(1,4):
+        bahan_bangunan[i][2]=0
+procedure_bangunan()
 def read_candi(file_csv):
     with open(file_csv) as csv: 
         data = csv.readlines()
@@ -98,12 +106,15 @@ for i in range(1,101):
                 candi[i][j]=int(candi[i][j])
             else :
                 candi[i][j]=candi[i][j]
+usersundo =[['kosong' for i in range(4) ]for j in range(101)]
+candiundo= [['kosong'for i in range(5)]for j in range(101)]
 username_login=''
+totalhapus =0
 def searchusers(idicari,username):
     found = True
     i=1
     while found:
-        if users[i][idicari]== username:
+        if users[i][idicari] == username:
             return True
         else :
             i+=1
@@ -114,12 +125,12 @@ def searchcandi(idicari,username):
     i=1
     while found:
         if users[i][idicari]== username:
-            found = False
+            
             return True
         else :
             i+=1
         if i > 100:
-            found = False
+        
             return False
 def login():
     global username_login
@@ -220,7 +231,7 @@ def summonjin():
     else:
         print("Summon jin hanya dapat diakses bandung bondowoso")
 def hapusjin():
-    global username_login
+    global username_login,totalhapus
     if username_login == 'Bondowoso':
         username_jin = input('Masukkan username jin : ')
         if searchusers(0,username_jin):
@@ -228,19 +239,32 @@ def hapusjin():
             while konfirmasi != 'n' and konfirmasi !='N' and konfirmasi != 'y' and konfirmasi !='Y' :
                 konfirmasi = input(f'Apakah anda yakin ingin menghapus jin dengan username {username_jin} (Y/N)? ')
             if konfirmasi == 'y' or konfirmasi == 'Y':
+                totalhapus+=1
                 for i in range(3,102):
                     if users[i][0] == username_jin:
+                
+                        usersundo[i][0] = users[i][0]
+                        usersundo[i][1] = users[i][1]
+                        usersundo[i][2] = users[i][2]
+                        usersundo[i][3] = i #letak data
+                            
                         users[i][0] = 'kosong'
                         users[i][1] = 'kosong'
                         users[i][2] = 'kosong'
+                        break
                 for i in range(1,101): #bila jin sudah membangun candi
                     if candi[i][1]==username_jin:
+                        candiundo[i][0]=candi[i][0]
+                        candiundo[i][1]=candi[i][1]
+                        candiundo[i][2]=candi[i][2]
+                        candiundo[i][3]=candi[i][3]
+                        candiundo[i][4]=candi[i][4]
                         candi[i][0]= 0 
                         candi[i][1]='kosong'
                         candi[i][2]=0
                         candi[i][3]=0
                         candi[i][4]=0
-                        
+                       
                 print('Jin telah berhasil dihapus dari alam gaib.')
             else :
                 print("Jin gagal dihapus")
@@ -390,7 +414,7 @@ def batchbangun():
             print('Bangun gagal. Anda tidak punya jin pembangun. Silahkan summon terlebih dahulu.')
         else :
             username_jin = ["kosong" for i in range(total_jin_pembangun)]
-            idjin =0
+            idjin = 0
             for i in range(3,103):
                 if users[i][2]=='jin_pembangun':
                     username_jin[idjin]=users[i][0]
@@ -415,7 +439,6 @@ def batchbangun():
                 idusernamejin=0 
                 for i in range(1,101):
                         if candi[i][0] == 0:
-                            # for j in range(total_jin_pembangun):
                             candi[i][2]=bahan[idusernamejin][1]
                             candi[i][3]=bahan[idusernamejin][0]
                             candi[i][4]=bahan[idusernamejin][2]
@@ -451,7 +474,8 @@ def batchbangun():
                 elif kurang_batu>0:
                     print(f'Bangun gagal kurang {total_batu - bahan_bangunan[1][2]} batu.')
                 elif kurang_air>0:
-                    print(f'Bangun gagal kurang {total_air - bahan_bangunan[3][2]} air.')
+                    print(f'Bangun gagal kurang {total_air - bahan_bangunan[3][2]} air.')               
+
     else :
         print("Hanya dapat diakses Bandung BOndowoso.")
 def laporanjin():
@@ -827,9 +851,16 @@ def tocsv(file,data,n1,n2):
     for i in range(n1):
         for j in range(n2):
             if j != (n2-1):
-                string = string + str(data[i][j]) + ';'
+                if str(data[i][j])  =='kosong' or str(data[i][j])=='0':
+                    string = ''
+                else :
+                    string = string + str(data[i][j]) + ';'
             else :
-                string = string + str(data[i][j])
+                if str(data[i][j])  =='kosong' or str(data[i][j])=='0':
+                    string = ''
+                else :
+                    string = string + str(data[i][j])
+        
         string = string + "\n"
         f.write(string)
         string=''
@@ -846,14 +877,45 @@ def save():
             if os.path.exists(f'save\\{folder}'):
                 tocsv(f'save\\{folder}\\user.csv',users,103,3)
                 tocsv(f'save\\{folder}\\candi.csv',candi,101,5)
-                tocsv(f'save\\{folder}\\bahan_bangunan.csv',bahan_bangunan,4,3)
+                tocsv(f'save\\{folder}\\bahan_bangunan.csv',bahan_bangunan,1,3)
             else :
 
                 os.makedirs(f'save\\{folder}')
                 print(f'Membuat folder save/{folder}!')
                 tocsv(f'save\\{folder}\\user.csv',users,103,3)
                 tocsv(f'save\\{folder}\\candi.csv',candi,101,5)
-                tocsv(f'save\\{folder}\\bahan_bangunan.csv',bahan_bangunan,4,3)
+                tocsv(f'save\\{folder}\\bahan_bangunan.csv',bahan_bangunan,1,3)
             print(f'Berhasil menyimpan data di folder save/{folder} ! ')
     else :
         print('Anda harus login terlebih dahulu!')
+def undo():
+    global username_login,totalhapus
+    if username_login=='Bondowoso':
+        if totalhapus>0:
+            totalhapus -=1
+            for i in range(100,-1,-1):
+                if usersundo[i][0] != 'kosong':
+                    users[int(usersundo[i][3])][0] = usersundo[i][0]
+                    users[int(usersundo[i][3])][1] = usersundo[i][1]
+                    users[int(usersundo[i][3])][2] = usersundo[i][2]
+                    for j in range(100,-1,-1):        
+                        if candiundo[j][1] == usersundo[i][0]:
+                            candi[int(candiundo[j][0])][0]=candiundo[j][0]
+                            candi[int(candiundo[j][0])][1]=candiundo[j][1]
+                            candi[int(candiundo[j][0])][2]=candiundo[j][2]
+                            candi[int(candiundo[j][0])][3]=candiundo[j][3]
+                            candi[int(candiundo[j][0])][4]=candiundo[j][4]
+        
+                    
+                    for j in range(4):
+                        usersundo[i][j]='kosong'
+                    break
+        else :
+            print("Tidak ada yang bisa di undo.")
+    else :
+        print('Undo hanya dapat diakses Bandung Bondowoso.')
+
+if searchcandi(0,2):
+    print('ada')
+else :
+    print("yy")
