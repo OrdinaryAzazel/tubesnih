@@ -35,10 +35,13 @@ while True:
         command.exit()
     elif masukan=='batchbangun':
         command.batchbangun()
+    elif masukan == 'undo':
+        command.undo()
     elif masukan =='':
         continue
     else :
-        print(f'{masukan} tidak ada di command list.')
+        print(f'{masukan} tidak ada di command list. ')
+
   
 
     
